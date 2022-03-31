@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+
+    <CFBundleName>YWB</CFBundleName> <!-- Also defines .app file name -->
+    <CFBundleDisplayName>YWB</CFBundleDisplayName>
+    <CFBundleIdentifier>com.example</CFBundleIdentifier>
+    <CFBundleShortVersionString>0.9</CFBundleShortVersionString>
+    <CFBundleVersion>1.0.0</CFBundleVersion>
+    <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleSignature>????</CFBundleSignature>
+    <CFBundleExecutable>YWB.AntidetectAccountParcer</CFBundleExecutable>
+    <CFBundleIconFile>YWB.AntidetectAccountParcer.icns</CFBundleIconFile> <!-- Will be copied from output directory -->
+    <NSPrincipalClass>NSApplication</NSPrincipalClass>
+    <NSHighResolutionCapable>true</NSHighResolutionCapable>
+
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Playwright" Version="1.17.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="SharpCompress" Version="0.30.1" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dotnet.Bundle" />
+  </ItemGroup>
+</Project>

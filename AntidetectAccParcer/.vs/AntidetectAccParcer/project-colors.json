@@ -1,0 +1,56 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "e779553f-7e7c-4ef5-8ace-bf08c76de168": {
+      "ProjectGuid": "e779553f-7e7c-4ef5-8ace-bf08c76de168",
+      "DisplayName": "AntidetectAccParcer",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Прочие файлы",
+      "ColorIndex": -1
+    },
+    "74df0732-f5a2-4aa2-98a0-7fd4fed09a33": {
+      "ProjectGuid": "74df0732-f5a2-4aa2-98a0-7fd4fed09a33",
+      "DisplayName": "YWB.AntidetectAccountParser",
+      "ColorIndex": 1
+    },
+    "83da3bc3-f716-4741-a22b-464b6ab15cbb": {
+      "ProjectGuid": "83da3bc3-f716-4741-a22b-464b6ab15cbb",
+      "DisplayName": "Material.Avalonia",
+      "ColorIndex": 2
+    },
+    "bd4d414a-994d-49f9-aac3-af2b375ecafe": {
+      "ProjectGuid": "bd4d414a-994d-49f9-aac3-af2b375ecafe",
+      "DisplayName": "Material.Avalonia",
+      "ColorIndex": 3
+    },
+    "f7c8e7b3-37cf-420d-95f5-3ab36603c58a": {
+      "ProjectGuid": "f7c8e7b3-37cf-420d-95f5-3ab36603c58a",
+      "DisplayName": "Material.Styles",
+      "ColorIndex": 4
+    },
+    "1540c236-b4d0-4cce-8bf0-1145743676a1": {
+      "ProjectGuid": "1540c236-b4d0-4cce-8bf0-1145743676a1",
+      "DisplayName": "Material.Ripple",
+      "ColorIndex": 5
+    },
+    "12204d2d-c7ce-48e3-b956-d0c2fc5e60e4": {
+      "ProjectGuid": "12204d2d-c7ce-48e3-b956-d0c2fc5e60e4",
+      "DisplayName": "Material.Dialog",
+      "ColorIndex": 6
+    },
+    "83d306ab-6e4f-4ecb-b49a-7638d1a9870d": {
+      "ProjectGuid": "83d306ab-6e4f-4ecb-b49a-7638d1a9870d",
+      "DisplayName": "Material.Colors",
+      "ColorIndex": 7
+    },
+    "ffbea5a3-5b18-4325-a640-9e242dd4f714": {
+      "ProjectGuid": "ffbea5a3-5b18-4325-a640-9e242dd4f714",
+      "DisplayName": "YWB.AntidetectAccountParser",
+      "ColorIndex": 8
+    }
+  },
+  "NextColorIndex": 9
+}

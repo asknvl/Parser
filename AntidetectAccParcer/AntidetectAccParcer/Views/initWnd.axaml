@@ -1,0 +1,195 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:cust="using:AntidetectAccParcer.Views.custom"
+		xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+		xmlns:colors="clr-namespace:Material.Styles;assembly=Material.Colors"
+		xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"		
+        mc:Ignorable="d"
+        x:Class="AntidetectAccParcer.Views.initWnd"		
+		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"
+		CanResize="False"
+		SizeToContent="WidthAndHeight"
+		WindowStartupLocation="CenterOwner">
+
+	<Grid Name="MainGrid" RowDefinitions="Auto, Auto, Auto, Auto, Auto" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White">
+		<Grid Grid.Row="0" RowDefinitions="Auto, Auto" Margin="10, 15, 10, 10">
+			<TextBlock Grid.Row="0" Margin="0, 0, 0, 8">
+				Выберите место экспорта
+			</TextBlock>
+			<Grid ColumnDefinitions="1*, 1*, 1*" Grid.Row="1" HorizontalAlignment="Stretch"  Height="35">
+				<RadioButton Grid.Column="0" IsChecked="{Binding IsOcto}" Classes="Button" GroupName="1">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, -1, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						Octo
+					</TextBlock>
+				</RadioButton>
+				<RadioButton Grid.Column="1" IsChecked="{Binding IsDolphin}" Classes="Button" GroupName="1" IsEnabled="False">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="1, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, -1, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="0"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						Dolphin
+					</TextBlock>
+				</RadioButton>
+				<RadioButton Grid.Column="2" IsChecked="{Binding IsFbTool}" Classes="Button" GroupName="1" IsEnabled="False">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="1, 0, 0, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						FBTool
+					</TextBlock>
+				</RadioButton>
+			</Grid>
+		</Grid>
+		<Grid Grid.Row="1" RowDefinitions="Auto, Auto" Margin="10">
+			<TextBlock Grid.Row="0" Margin="0, 0, 0, 8">
+				Выберите тип файлов
+			</TextBlock>
+			<Grid ColumnDefinitions="1*, 1*" Grid.Row="1" HorizontalAlignment="Stretch"  Height="35">
+				<RadioButton Grid.Column="0" IsChecked="{Binding IsArchive}" Classes="Button" GroupName="2">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, -1, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						Архив
+					</TextBlock>
+				</RadioButton>
+				<RadioButton Grid.Column="1" IsChecked="{Binding IsText}" Classes="Button" GroupName="2" IsEnabled="False">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="1, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						Текстовый файл
+					</TextBlock>
+				</RadioButton>
+			</Grid>
+		</Grid>
+		<Grid Grid.Row="2" RowDefinitions="Auto, Auto" Margin="10" IsVisible="False">
+			<TextBlock Grid.Row="0" Margin="0, 0, 0, 8">
+				Выберите платформу
+			</TextBlock>
+			<Grid ColumnDefinitions="1*, 1*" Grid.Row="1" HorizontalAlignment="Stretch"  Height="35">
+				<RadioButton Grid.Column="0" IsChecked="{Binding IsWindows}" Classes="Button" GroupName="3">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, -1, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						Windows
+					</TextBlock>
+				</RadioButton>
+				<RadioButton Grid.Column="1" IsChecked="{Binding IsMac}" Classes="Button" GroupName="3">
+					<RadioButton.Styles>
+						<Style Selector="RadioButton.Button:checked">
+							<Setter Property="Margin" Value="1, 0, 0, 0"/>
+						</Style>
+						<Style Selector="RadioButton">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+						</Style>
+					</RadioButton.Styles>
+					<TextBlock HorizontalAlignment="Center">
+						MacOS
+					</TextBlock>
+				</RadioButton>
+			</Grid>
+		</Grid>
+		<Grid Grid.Row="3" RowDefinitions="Auto, Auto" Margin="10">
+			<TextBlock Classes="Solo" Grid.Row="0">
+				Укажите свою букву и номер первого аккаунта
+			</TextBlock>
+			<Grid ColumnDefinitions="1*, 1*" Grid.Row="1" HorizontalAlignment="Stretch">
+				<cust:LiteraTextBox Grid.Column="0" Classes="TextBox CenterBorder" Text="{Binding Litera}" MaxLength="2" TextAlignment="Center" Height="35">
+					<cust:LiteraTextBox.Styles>
+						<Style Selector="TextBox:focus Border">
+							<Setter Property="BorderBrush" Value="#FF2196F3"/>
+							<Setter Property="Margin" Value="0, 0, 1, 0"/>
+						</Style>
+						<Style Selector="TextBox Border">
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+						</Style>
+					</cust:LiteraTextBox.Styles>
+				</cust:LiteraTextBox>
+				<cust:IntTextBox Grid.Column="1" Classes="TextBox CenterBorder" Text="{Binding StartNumber}" TextAlignment="Center" Height="35" Margin="0, 0, 0, 0">
+					<cust:IntTextBox.Styles>
+						<Style Selector="TextBox:focus Border">
+							<Setter Property="BorderBrush" Value="#FF2196F3"/>
+							<Setter Property="Margin" Value="0, 0, 0, 0"/>
+						</Style>
+						<Style Selector="TextBox Border">
+							<Setter Property="Margin" Value="-1, 0, 0, 0"/>
+						</Style>
+						<Style Selector="Border">
+							<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+						</Style>
+					</cust:IntTextBox.Styles>
+				</cust:IntTextBox>
+			</Grid>
+		</Grid>
+		<Grid Grid.Row="4" ColumnDefinitions="1*, 1*" HorizontalAlignment="Stretch" Margin="10" Width="250">
+			<Button Grid.Column="0" Command="{Binding cancelCmd}" Foreground="White" Margin="2">
+				Отмена
+			</Button>
+			<Button Grid.Column="1" Command="{Binding continueCmd}" Margin="2" Foreground="White">
+				Подтвердить
+			</Button>			
+		</Grid>
+	</Grid>
+
+</Window>

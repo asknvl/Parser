@@ -1,0 +1,398 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1300" d:DesignHeight="500"
+		xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+		xmlns:colors="clr-namespace:Material.Styles;assembly=Material.Colors"
+		xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+        x:Class="AntidetectAccParcer.Views.importWnd"		
+        Title="XTime Parser v1.0" 
+		Width="1280" Height="720"
+		WindowStartupLocation="CenterScreen">
+
+	<Window.Styles>
+		<Style Selector="ToolTip">
+			<Setter Property="Foreground" Value="Black"/>
+			<Setter Property="Background" Value="White"/>
+			<Setter Property="Margin" Value="0,0"/>
+			<Setter Property="Padding" Value="0" />
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Placement" Value="Pointer" />
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Border Background="{TemplateBinding Background}" CornerRadius="3"
+								Margin="{TemplateBinding Margin}">
+							<ContentPresenter Name="ContentPresenter"
+											  Margin="{TemplateBinding Padding}"
+											  Content="{TemplateBinding ContentControl.Content}"
+											  ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" />
+						</Border>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Styles>
+
+	<Grid Name="MainGrid" Background="White">
+		<Grid RowDefinitions="Auto, Auto, *, Auto">
+			<ProgressBar Grid.Row="0" Value="{Binding Progress}" Maximum="100" Margin="20, 10, 20, 0"/>
+			<Grid Grid.Row="1" VerticalAlignment="Center" Margin="10">
+				<ListBox Name="TagsListBox" Items="{Binding Tags}" SelectedItems="{Binding SelectedTags}" VirtualizationMode="None" SelectionMode="Multiple, Toggle" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel/>
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+					<ListBox.Styles>
+						<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+							<!--<Setter Property="TextBlock.Foreground" Value="White"/>
+							<Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>-->
+							<Setter Property="TextBlock.Foreground" Value="#FF2196F3"/>
+							<Setter Property="TextBlock.Background" Value="#0F2196F3"/>
+						</Style>
+						<Style Selector="ListBoxItem">
+							<Setter Property="TextBlock.Foreground" Value="LightGray"/>
+							<Setter Property="Background" Value="#05000000"/>
+							<Setter Property="TextBlock.Foreground" Value="Gray"/>
+							<Setter Property="Margin" Value="2"/>
+						</Style>
+					</ListBox.Styles>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<ContentControl Content="{avalonia:MaterialIconExt Tag, Size=16}"  Margin="4" VerticalAlignment="Center">
+									<ContentControl.RenderTransform>
+										<RotateTransform Angle="0"/>
+									</ContentControl.RenderTransform>
+								</ContentControl>
+								<TextBlock Text="{Binding}" VerticalAlignment="Center" Margin="2, 0, 4, 0" FontSize="14"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+			<Grid Grid.Row="2" ColumnDefinitions="*, *, *, *" Margin="10">
+				<Grid Grid.Column="0" RowDefinitions="24, 40, *" Margin="10">
+					<TextBlock Grid.Row="0" VerticalAlignment="Center">
+						Прокси:
+					</TextBlock>
+					<Grid Grid.Row="1" ColumnDefinitions="*, *" Margin="1, 0, 2, 5" VerticalAlignment="Center" Height="32">
+						<RadioButton Grid.Column="0" IsChecked="{Binding BrowserImport}" Command="{Binding loadBrowserProxies}" Classes="Button" IsEnabled="{Binding AllowProxyLoad}" GroupName="1">
+							<RadioButton.Styles>
+								<Style Selector="RadioButton.Button:checked">
+									<Setter Property="Margin" Value="0, 0, 0, 0"/>
+								</Style>
+								<Style Selector="RadioButton">
+									<Setter Property="Margin" Value="0, 0, -1, 0"/>
+								</Style>
+								<Style Selector="Border">
+									<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+								</Style>
+							</RadioButton.Styles>
+							<TextBlock HorizontalAlignment="Center">
+								Octo
+							</TextBlock>
+						</RadioButton>
+						<RadioButton Grid.Column="1" IsChecked="{Binding FileImport}" Command="{Binding loadFileProxies}" Classes="Button" IsEnabled="{Binding AllowProxyLoad}" GroupName="1">
+							<RadioButton.Styles>
+								<Style Selector="RadioButton.Button:checked">
+									<Setter Property="Margin" Value="1, 0, 0, 0"/>
+								</Style>
+								<Style Selector="RadioButton">
+									<Setter Property="Margin" Value="0, 0, 0, 0"/>
+								</Style>
+								<Style Selector="Border">
+									<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+								</Style>
+							</RadioButton.Styles>
+							<TextBlock HorizontalAlignment="Center">
+								Импорт
+							</TextBlock>
+						</RadioButton>
+					</Grid>
+					<Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" Margin="1, 0, 1, 1">
+						<Grid RowDefinitions="Auto, *">
+							<CheckBox Grid.Row="0" IsChecked="{Binding IsAllProxyChecked}" Margin="4, 5, 0, 0">
+								<CheckBox.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="FontWeight" Value="Bold"/>
+									</Style>
+								</CheckBox.Styles>
+								Выбрать все
+							</CheckBox>
+							<ListBox Grid.Row="1" Items="{Binding Proxies}" SelectionMode="Multiple, Toggle" VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 0, 4, 0">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid Height="24">
+											<CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
+												<Grid VerticalAlignment="Center">
+													<TextBlock Text="{Binding Proxy.Title}" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 2, 0, 0"/>
+													<Image Source="{Binding Flag}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 60, 0"/>
+													<TextBlock Grid.Column="2" Text="{Binding Country}" VerticalAlignment="Center" Margin="0, 0, 30, 0" HorizontalAlignment="Right"/>
+												</Grid>
+											</CheckBox>
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+								<ListBox.Styles>
+									<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+										<Setter Property="Background" Value="White" />
+									</Style>
+									<Style Selector="ListBox:pointerover Border ScrollViewer">
+										<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+									</Style>
+									<Style Selector="ListBox Border ScrollViewer">
+										<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+									</Style>
+								</ListBox.Styles>
+							</ListBox>
+						</Grid>
+					</Border>
+				</Grid>
+				<Grid Grid.Column="1" RowDefinitions="24, 40, Auto, *" Margin="10">
+					<TextBlock Grid.Row="0" VerticalAlignment="Center">
+						Аккаунты:
+					</TextBlock>
+					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="0, 0, 0, 5">
+						<Button Name="ImportButton" Grid.Column="0" Command="{Binding loadAccounts}" Margin="1" Foreground="White">
+							<TextBlock HorizontalAlignment="Center">
+								Импорт аккаунтов
+							</TextBlock>
+						</Button>
+					</Grid>
+					<Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="1, 0, 1, 1">
+						<TextBox Text="{Binding SearchName}" Watermark="Поиск">
+							<TextBox.Styles>								
+								<Style Selector="TextBox:focus Border">
+									<Setter Property="BorderBrush" Value="#822196F3"/>
+								</Style>
+							</TextBox.Styles>
+							<TextBox.InnerRightContent>
+								<!--<Button Command="{Binding searchCmd}" Classes="Flat" Padding="4" Width="{Binding $self.Bounds.Height}"
+										Content="{avalonia:MaterialIconExt Search, Size=24}"/>-->
+								<ContentControl Content="{avalonia:MaterialIconExt Search, Size=24}" Foreground="LightGray" Margin="0, 0, 3, 0"/>
+							</TextBox.InnerRightContent>
+						</TextBox>
+					</Grid>
+					<Grid Name="DragContent" Grid.Row="3" Background="White" Margin="2" IsVisible="{Binding IsDragTextVisible}">
+						<avalonia:MaterialIcon
+												   Kind="TrayArrowDown"
+												   VerticalAlignment="Center"
+												   HorizontalAlignment="Center"
+												   Foreground="Gray"
+												   Width="36"
+												   Height="36" />
+						<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20, 50, 20, 0" TextAlignment="Center" TextWrapping="Wrap" FontSize="10" Foreground="Gray">
+							Перетяните архивы с аккаунтами для импорта
+						</TextBlock>
+
+					</Grid>
+					<Border Grid.Row="3" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+						<Grid RowDefinitions="Auto, *">
+							<CheckBox Grid.Row="0" IsChecked="{Binding IsAllAccountsChecked}" Margin="4, 5, 0, 0">
+								<CheckBox.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="FontWeight" Value="Bold"/>
+									</Style>
+								</CheckBox.Styles>
+								Выбрать все
+							</CheckBox>
+							<ListBox Name="AccountsListBox" Grid.Row="1" Items="{Binding Accounts}" SelectionMode="Single" SelectedItem="{Binding SelectedAccount} " VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 2, 4, 0" DragDrop.AllowDrop="True">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="Auto, Auto">
+											<CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" Height="24" VerticalAlignment="Center"/>
+											<!--<TextBlock Text="{Binding Account.AccountName}" FontWeight="Bold"/>-->
+											<TextBlock Grid.Column="1" Text="{Binding AccountName}" Margin="0, 2, 0, 0" FontWeight="Bold" VerticalAlignment="Center"/>
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+								<ListBox.Styles>
+									<Style Selector="ListBox:pointerover Border ScrollViewer">
+										<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+									</Style>
+									<Style Selector="ListBox Border ScrollViewer">
+										<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+									</Style>
+								</ListBox.Styles>
+							</ListBox>
+						</Grid>
+					</Border>
+				</Grid>
+				<Grid Grid.Column="2" RowDefinitions="24, 40, *" Margin="10">
+					<TextBlock Grid.Row="0" VerticalAlignment="Center">
+						Данные:
+					</TextBlock>
+					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="0, 0, 0, 5">
+						<Button Grid.Column="0" Command="{Binding copyData}" Margin="1" Foreground="White">
+							<TextBlock HorizontalAlignment="Center">
+								Копировать данные
+							</TextBlock>
+						</Button>
+					</Grid>
+					<Border Name="InfoBorder" Grid.Row="2" BorderBrush="LightGray" BorderThickness="1">
+						<ScrollViewer Margin="10, 10, 4, 10">
+							<ScrollViewer.Styles>
+								<Style Selector="ScrollViewer:pointerover">
+									<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+								</Style>
+								<Style Selector="ScrollViewer">
+									<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+								</Style>
+							</ScrollViewer.Styles>
+							<Grid RowDefinitions="20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, Auto, Auto, Auto">
+								<Grid Grid.Row="0" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Имя аккаунта:
+									</TextBlock>
+									<!--<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.AccountName}" FontSize="14" FontWeight="Bold"  VerticalAlignment="Center" Classes="TextBox NoBorder"/>-->
+									<TextBox Name="AccountNameTextBox" Grid.Column="1" Text="{Binding SelectedAccount.AccountName}" FontSize="14" FontWeight="Bold"  VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="1" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Имя:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Name}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+
+								</Grid>
+								<Grid Grid.Row="2" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Дата:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BirthDate}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+
+								</Grid>
+								<Grid Grid.Row="3" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Спенд:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Spent}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="4" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Валюта:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Currency}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="5" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Долг:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Duty}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="6" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Лимит:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Limit}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="7" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Предоплата:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Prepay}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="8" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Статус:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Status}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="9" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Карты:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Cards}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="10" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										ГЕО РК:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.GEO_RK}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="11" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										ГЕО СЦ:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.GEO_SC}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="12" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										БМ:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BM}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="13" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										ФП:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.FP}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<TextBox Grid.Row="14" Text="{Binding SelectedAccount.Account.DisplayInfoString}" VerticalAlignment="Center" Classes="TextBox NoBorder"  FontSize="12" TextWrapping="Wrap" Foreground="Gray" Margin="-3, 0, 0, 0"/>
+
+								<TextBox Grid.Row="15" Text="{Binding SelectedAccount.Account.Info.UserAgent}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
+
+								<TextBox Grid.Row="16" Text="{Binding SelectedAccount.Account.Info.Token}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
+
+							</Grid>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+				<Grid Grid.Column="3" RowDefinitions="24, *" Margin="10">
+					<TextBlock Grid.Row="0" VerticalAlignment="Center">
+						Пароли:
+					</TextBlock>
+					<Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+						<ListBox Grid.Row="1" Items="{Binding SelectedAccount.Account.LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single, Toggle" VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 2, 4, 0">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<!--<Grid Height="24">									
+										<TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+									</Grid>-->
+									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="AnchorAndGravity" Height="24">
+										<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Password}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2">
+											<ToolTip.Tip>
+												<Border BorderBrush="LightGray" BorderThickness="1">
+													<ListBox Items="{Binding Logins}" Margin="4">
+														<ListBox.Styles>
+															<Style Selector="ListBox TextBlock">
+																<Setter Property="FontWeight" Value="Bold"/>
+																<Setter Property="FontSize" Value="12"/>
+															</Style>
+														</ListBox.Styles>
+													</ListBox>
+												</Border>
+											</ToolTip.Tip>
+										</TextBlock>
+										<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Note}" Grid.RowSpan="2" FontSize="12" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 0, 15, 0"/>
+									</Grid>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+							<ListBox.Styles>
+								<Style Selector="ListBox:pointerover Border ScrollViewer">
+									<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+								</Style>
+								<Style Selector="ListBox Border ScrollViewer">
+									<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+								</Style>
+							</ListBox.Styles>
+						</ListBox>
+					</Border>
+				</Grid>
+			</Grid>
+			<Grid Grid.Row="3" ColumnDefinitions="50, *" Margin="20 0 20 10">
+				<Button Grid.Column="0" Command="{Binding callParameters}" Margin="0, 0, 10, 0" Content="{avalonia:MaterialIconExt Cog, Size=24}" Foreground="White"/>
+				<Button Grid.Column="1" Command="{Binding exportAccounts}" IsEnabled="{Binding AllowExport}" Foreground="White">
+					Экспорт
+				</Button>
+			</Grid>
+		</Grid>
+		<Grid Name="OverlayGrid" Background="Gray" Opacity="0.7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		</Grid>
+	</Grid>
+</Window>

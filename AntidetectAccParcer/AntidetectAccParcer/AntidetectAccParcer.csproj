@@ -1,0 +1,241 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>False</UseWPF>
+    <SignAssembly>False</SignAssembly>
+
+    <CFBundleName>AntidetectAccParcer</CFBundleName> <!-- Also defines .app file name -->
+    <CFBundleDisplayName>XTime Parser</CFBundleDisplayName>
+    <CFBundleIdentifier>com.xtimeparcer</CFBundleIdentifier>
+    <CFBundleShortVersionString>1.0</CFBundleShortVersionString>
+    <CFBundleVersion>1.0.0</CFBundleVersion>
+    <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleSignature>????</CFBundleSignature>
+    <CFBundleExecutable>AntidetectAccParcer</CFBundleExecutable>
+    <CFBundleIconFile>icon.icns</CFBundleIconFile> <!-- Will be copied from output directory -->
+    <NSPrincipalClass>NSApplication</NSPrincipalClass>
+    <NSHighResolutionCapable>true</NSHighResolutionCapable>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+    <Compile Remove="Models\Proxies\Class1.cs" />
+    <None Remove=".gitignore" />
+    <None Remove="Assets\AB.png" />
+    <None Remove="Assets\AD.png" />
+    <None Remove="Assets\AE.png" />
+    <None Remove="Assets\AF.png" />
+    <None Remove="Assets\AI.png" />
+    <None Remove="Assets\AL.png" />
+    <None Remove="Assets\AM.png" />
+    <None Remove="Assets\AO.png" />
+    <None Remove="Assets\AR.png" />
+    <None Remove="Assets\AT.png" />
+    <None Remove="Assets\AU.png" />
+    <None Remove="Assets\AZ.png" />
+    <None Remove="Assets\BA.png" />
+    <None Remove="Assets\BD.png" />
+    <None Remove="Assets\BE.png" />
+    <None Remove="Assets\BG.png" />
+    <None Remove="Assets\BH.png" />
+    <None Remove="Assets\BN.png" />
+    <None Remove="Assets\BO.png" />
+    <None Remove="Assets\BR.png" />
+    <None Remove="Assets\BT.png" />
+    <None Remove="Assets\BW.png" />
+    <None Remove="Assets\BY.png" />
+    <None Remove="Assets\BZ.png" />
+    <None Remove="Assets\CA.png" />
+    <None Remove="Assets\CD.png" />
+    <None Remove="Assets\CF.png" />
+    <None Remove="Assets\CH.png" />
+    <None Remove="Assets\CI.png" />
+    <None Remove="Assets\CK.png" />
+    <None Remove="Assets\CL.png" />
+    <None Remove="Assets\CM.png" />
+    <None Remove="Assets\CN.png" />
+    <None Remove="Assets\CO.png" />
+    <None Remove="Assets\CR.png" />
+    <None Remove="Assets\CU.png" />
+    <None Remove="Assets\CV.png" />
+    <None Remove="Assets\CX.png" />
+    <None Remove="Assets\CY.png" />
+    <None Remove="Assets\CZ.png" />
+    <None Remove="Assets\DE.png" />
+    <None Remove="Assets\DK.png" />
+    <None Remove="Assets\DM.png" />
+    <None Remove="Assets\DO.png" />
+    <None Remove="Assets\DZ.png" />
+    <None Remove="Assets\EC.png" />
+    <None Remove="Assets\EE.png" />
+    <None Remove="Assets\EG.png" />
+    <None Remove="Assets\ER.png" />
+    <None Remove="Assets\ES.png" />
+    <None Remove="Assets\ET.png" />
+    <None Remove="Assets\FI.png" />
+    <None Remove="Assets\FO.png" />
+    <None Remove="Assets\FR.png" />
+    <None Remove="Assets\GA.png" />
+    <None Remove="Assets\GB.png" />
+    <None Remove="Assets\GD.png" />
+    <None Remove="Assets\GE.png" />
+    <None Remove="Assets\GH.png" />
+    <None Remove="Assets\GI.png" />
+    <None Remove="Assets\GL.png" />
+    <None Remove="Assets\GM.png" />
+    <None Remove="Assets\GN.png" />
+    <None Remove="Assets\GQ.png" />
+    <None Remove="Assets\GR.png" />
+    <None Remove="Assets\GT.png" />
+    <None Remove="Assets\HK.png" />
+    <None Remove="Assets\HN.png" />
+    <None Remove="Assets\HR.png" />
+    <None Remove="Assets\HT.png" />
+    <None Remove="Assets\HU.png" />
+    <None Remove="Assets\ID.png" />
+    <None Remove="Assets\IE.png" />
+    <None Remove="Assets\IL.png" />
+    <None Remove="Assets\IN.png" />
+    <None Remove="Assets\IQ.png" />
+    <None Remove="Assets\IR.png" />
+    <None Remove="Assets\IS.png" />
+    <None Remove="Assets\IT.png" />
+    <None Remove="Assets\JM.png" />
+    <None Remove="Assets\JO.png" />
+    <None Remove="Assets\JP.png" />
+    <None Remove="Assets\KE.png" />
+    <None Remove="Assets\KG.png" />
+    <None Remove="Assets\KH.png" />
+    <None Remove="Assets\KR.png" />
+    <None Remove="Assets\KW.png" />
+    <None Remove="Assets\KZ.png" />
+    <None Remove="Assets\LB.png" />
+    <None Remove="Assets\LI.png" />
+    <None Remove="Assets\LK.png" />
+    <None Remove="Assets\LR.png" />
+    <None Remove="Assets\LT.png" />
+    <None Remove="Assets\LU.png" />
+    <None Remove="Assets\LV.png" />
+    <None Remove="Assets\LY.png" />
+    <None Remove="Assets\MA.png" />
+    <None Remove="Assets\MC.png" />
+    <None Remove="Assets\MD.png" />
+    <None Remove="Assets\ME.png" />
+    <None Remove="Assets\MG.png" />
+    <None Remove="Assets\MK.png" />
+    <None Remove="Assets\ML.png" />
+    <None Remove="Assets\MM.png" />
+    <None Remove="Assets\MN.png" />
+    <None Remove="Assets\MT.png" />
+    <None Remove="Assets\MU.png" />
+    <None Remove="Assets\MV.png" />
+    <None Remove="Assets\MX.png" />
+    <None Remove="Assets\MY.png" />
+    <None Remove="Assets\NE.png" />
+    <None Remove="Assets\NG.png" />
+    <None Remove="Assets\NI.png" />
+    <None Remove="Assets\NL.png" />
+    <None Remove="Assets\NO.png" />
+    <None Remove="Assets\NP.png" />
+    <None Remove="Assets\NZ.png" />
+    <None Remove="Assets\OM.png" />
+    <None Remove="Assets\PA.png" />
+    <None Remove="Assets\PE.png" />
+    <None Remove="Assets\PG.png" />
+    <None Remove="Assets\PH.png" />
+    <None Remove="Assets\PK.png" />
+    <None Remove="Assets\PL.png" />
+    <None Remove="Assets\PR.png" />
+    <None Remove="Assets\PS.png" />
+    <None Remove="Assets\PT.png" />
+    <None Remove="Assets\PY.png" />
+    <None Remove="Assets\QA.png" />
+    <None Remove="Assets\RE.png" />
+    <None Remove="Assets\RO.png" />
+    <None Remove="Assets\RS.png" />
+    <None Remove="Assets\RU.png" />
+    <None Remove="Assets\RW.png" />
+    <None Remove="Assets\SA.png" />
+    <None Remove="Assets\SD.png" />
+    <None Remove="Assets\SE.png" />
+    <None Remove="Assets\SG.png" />
+    <None Remove="Assets\SI.png" />
+    <None Remove="Assets\SK.png" />
+    <None Remove="Assets\SM.png" />
+    <None Remove="Assets\SN.png" />
+    <None Remove="Assets\SO.png" />
+    <None Remove="Assets\SV.png" />
+    <None Remove="Assets\SY.png" />
+    <None Remove="Assets\TH.png" />
+    <None Remove="Assets\TJ.png" />
+    <None Remove="Assets\TM.png" />
+    <None Remove="Assets\TN.png" />
+    <None Remove="Assets\TR.png" />
+    <None Remove="Assets\TT.png" />
+    <None Remove="Assets\TW.png" />
+    <None Remove="Assets\TZ.png" />
+    <None Remove="Assets\UA.png" />
+    <None Remove="Assets\UG.png" />
+    <None Remove="Assets\US.png" />
+    <None Remove="Assets\UY.png" />
+    <None Remove="Assets\UZ.png" />
+    <None Remove="Assets\VE.png" />
+    <None Remove="Assets\VN.png" />
+    <None Remove="Assets\WS.png" />
+    <None Remove="Assets\YE.png" />
+    <None Remove="Assets\ZA.png" />
+    <None Remove="Assets\ZM.png" />
+    <None Remove="Assets\ZW.png" />
+    <None Remove="Dotnet.Bundle" />
+    <None Remove="YWB.AntidetectAccountParser" />
+    <None Remove="SharpCompress" />
+    <None Remove="RestSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Include="Avalonia" Version="0.10.999-cibuild0019103-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.999-cibuild0019103-beta" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.999-cibuild0019103-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.999-cibuild0019103-beta" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="1.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
+    <PackageReference Include="Svg" Version="3.4.0" />
+    <PackageReference Include="TextCopy" Version="6.1.0" />
+    <PackageReference Include="Dotnet.Bundle" Version="*" />
+    <PackageReference Include="SharpCompress" Version="0.30.1" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\YWB.AntidetectAccountParser-master\YWB.AntidetectAccountParser.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DialogHost.Avalonia">
+      <HintPath>libs\DialogHost.Avalonia.dll</HintPath>
+    </Reference>
+    <Reference Include="Material.Avalonia">
+      <HintPath>libs\Material.Avalonia.dll</HintPath>
+    </Reference>
+    <Reference Include="Material.Colors">
+      <HintPath>libs\Material.Colors.dll</HintPath>
+    </Reference>
+    <Reference Include="Material.Ripple">
+      <HintPath>libs\Material.Ripple.dll</HintPath>
+    </Reference>
+    <Reference Include="Material.Styles">
+      <HintPath>libs\Material.Styles.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\errMsgWnd.axaml.cs">
+      <DependentUpon>errMsgWnd.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProcessProxyWnd.axaml.cs">
+      <DependentUpon>ProcessProxyWnd.axaml</DependentUpon>
+    </Compile>	  
+  </ItemGroup>
+</Project>

@@ -1,0 +1,141 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+		xmlns:colors="clr-namespace:Material.Styles;assembly=Material.Colors"
+		xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+		xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+        mc:Ignorable="d"
+		x:Class="AntidetectAccParcer.Views.loadProxyWnd"        
+		ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="-1"		
+		WindowStartupLocation="CenterOwner"
+		CanResize="False"
+		SizeToContent="WidthAndHeight"
+		Background="White"
+		DragDrop.AllowDrop="True">
+	
+	<Grid Name="DragGrid" Width="350" Height="500" RowDefinitions="Auto, Auto, *, Auto, Auto" VerticalAlignment="Center" HorizontalAlignment="Center" Background="White"  DragDrop.AllowDrop="True" Margin="5">
+		<TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0, 15, 0, 0" FontSize="14" FontWeight="Bold">
+			Массовое добавление прокси
+		</TextBlock>
+		<Grid Grid.Row="1" ColumnDefinitions="1*, 1*, 1*" Margin="5, 5, 5, 5" Height="35">
+			<RadioButton Grid.Column="0" IsChecked="{Binding IsSocks5}" Classes="Button" GroupName="1">
+				<RadioButton.Styles>
+					<Style Selector="RadioButton.Button:checked">
+						<Setter Property="Margin" Value="0, 0, 0, 0"/>
+					</Style>
+					<Style Selector="RadioButton">
+						<Setter Property="Margin" Value="0, 0, -1, 0"/>
+					</Style>
+					<Style Selector="Border">
+						<Setter Property="CornerRadius" Value="3, 0, 0, 3"/>
+					</Style>
+				</RadioButton.Styles>
+				<TextBlock HorizontalAlignment="Center">
+					Socks5
+				</TextBlock>
+			</RadioButton>
+			<RadioButton Grid.Column="1" IsChecked="{Binding IsHttp}" Classes="Button" GroupName="1">
+				<RadioButton.Styles>
+					<Style Selector="RadioButton.Button:checked">
+						<Setter Property="Margin" Value="1, 0, 0, 0"/>
+					</Style>
+					<Style Selector="RadioButton">
+						<Setter Property="Margin" Value="0, 0, -1, 0"/>
+					</Style>
+					<Style Selector="Border">
+						<Setter Property="CornerRadius" Value="0"/>
+					</Style>
+				</RadioButton.Styles>
+				<TextBlock HorizontalAlignment="Center">
+					Http
+				</TextBlock>
+			</RadioButton>
+			<RadioButton Grid.Column="2" IsChecked="{Binding IsSsh}" Classes="Button" GroupName="1">
+				<RadioButton.Styles>
+					<Style Selector="RadioButton.Button:checked">
+						<Setter Property="Margin" Value="1, 0, 0, 0"/>
+					</Style>
+					<Style Selector="Border">
+						<Setter Property="CornerRadius" Value="0, 3, 3, 0"/>
+					</Style>
+				</RadioButton.Styles>
+				<TextBlock HorizontalAlignment="Center">
+					Ssh
+				</TextBlock>
+			</RadioButton>
+		</Grid>
+
+		<TextBox Name="ProxiesTextBox" Grid.Row="2"  Margin="5" Text="{Binding TextProxies}"
+				AcceptsReturn="True"
+				TextWrapping="Wrap"				
+				BorderBrush="Gray"			 
+				FontSize="12">
+			<TextBox.Styles>
+				<Style Selector="TextBox:focus Border">
+					<Setter Property="BorderBrush" Value="#FF2196F3"/>
+					<Setter Property="BorderDashArray" Value="1,0"/>
+				</Style>
+				<Style Selector="TextBox:focus Border">
+					<Setter Property="BorderBrush" Value="#FF2196F3"/>
+					<Setter Property="BorderDashArray" Value="1,0"/>
+				</Style>
+				<Style Selector="TextBox Border">
+					<Setter Property="BorderDashArray" Value="3,3"/>
+				</Style>
+			</TextBox.Styles>
+		</TextBox>
+
+		<Grid Name="DragContent" Grid.Row="2" Background="#0F000000" Margin="6, 6, 6, 9">
+			<avalonia:MaterialIcon
+									   Kind="TrayArrowDown"
+									   VerticalAlignment="Center"
+									   HorizontalAlignment="Center"
+									   Foreground="Gray"
+									   Width="36"
+									   Height="36" />
+			<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20, 60, 20, 0" TextAlignment="Center" TextWrapping="Wrap" FontSize="10" Foreground="Gray">
+				Перетяните текстовый файл с адресами прокси или кликните для ручного ввода
+			</TextBlock>
+
+		</Grid>
+
+		<Grid Grid.Row="3" Margin="5, 0, 0, 0">
+			<StackPanel Orientation="Vertical">
+				<TextBlock Foreground="LightGray">
+					host:port
+				</TextBlock>
+				<TextBlock Foreground="LightGray">
+					user:pass@host:port
+				</TextBlock>
+				<TextBlock Foreground="LightGray">
+					host:port:user:pass
+				</TextBlock>
+				<Grid RowDefinitions="Auto, Auto" Margin="0, 5, 0, 0">
+					<TextBlock FontWeight="Bold" Margin="0, 0, 0, 5">
+						Префикс имени прокси
+					</TextBlock>
+					<TextBox Grid.Row="1"  Text="{Binding Prefix}"  Width="145" HorizontalAlignment="Left">
+						<TextBox.Styles>
+							<Style Selector="TextBox:focus Border">
+								<Setter Property="BorderBrush" Value="#FF2196F3"/>
+							</Style>
+						</TextBox.Styles>
+					</TextBox>
+				</Grid>
+			</StackPanel>
+		</Grid>
+		<Grid Grid.Row="4" ColumnDefinitions="1*, 1*" HorizontalAlignment="Stretch" Margin="10" Width="250">
+			<Button Grid.Column="0" Command="{Binding cancelCmd}" Foreground="White" Margin="2">
+				Отмена
+			</Button>
+			<Button Grid.Column="1" Command="{Binding acceptCmd}" Foreground="White" Margin="2" IsEnabled="{Binding AllowConfirm}">
+				Подтвердить
+			</Button>			
+		</Grid>
+	</Grid>
+</Window>

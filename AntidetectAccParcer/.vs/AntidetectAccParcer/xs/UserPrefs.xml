@@ -1,0 +1,40 @@
+﻿<Properties StartupConfiguration="{E779553F-7E7C-4EF5-8ACE-BF08C76DE168}|Default">
+  <MonoDevelop.Ide.ItemProperties.AntidetectAccParcer PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="AntidetectAccParcer/Views/initWnd.axaml">
+    <Files>
+      <File FileName="AntidetectAccParcer/Views/initWnd.axaml" Line="1" Column="1" />
+      <File FileName="AntidetectAccParcer/Views/importWnd.axaml" Line="12" Column="34" />
+      <File FileName="AntidetectAccParcer/ViewModels/mainVM.cs" Line="183" Column="51" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="AntidetectAccParcer" expanded="True" selected="True">
+            <Node name="AntidetectAccParcer" expanded="True">
+              <Node name="Models" expanded="True">
+                <Node name="Browsers" expanded="True" />
+                <Node name="Proxies" expanded="True" />
+                <Node name="Storage" expanded="True" />
+              </Node>
+              <Node name="ViewModels" expanded="True" />
+              <Node name="Views" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>json</Value>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/ivanivanov/TestAccParcer/AntidetectAccParcer/AntidetectAccParcer/ViewModels/importVM.cs" relfile="AntidetectAccParcer/ViewModels/importVM.cs" line="568" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
