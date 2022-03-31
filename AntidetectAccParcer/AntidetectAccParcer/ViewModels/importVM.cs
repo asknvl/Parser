@@ -21,7 +21,7 @@ using System.Threading;
 using TextCopy;
 using System.IO;
 using Newtonsoft.Json;
-using AntidetectAccParcer.Models.Currencies;
+using YWB.AntidetectAccountParser.Services.Currency;
 
 namespace AntidetectAccParcer.ViewModels
 {
@@ -240,7 +240,15 @@ namespace AntidetectAccParcer.ViewModels
             browserData = (IBrowserDataProvider)browser;
             IProxyChecker checker = new ipwhoisProxyChecker();
             var ExtractorFactory = new ExtractorFactory();
-            ICurrencyConverter currency = new openexchangerates_org();
+
+            try
+            {
+                openexchangerates_org.getInstance().Init();
+            } catch (Exception ex)
+            {
+
+            }
+
             #endregion
 
             #region init
@@ -252,9 +260,7 @@ namespace AntidetectAccParcer.ViewModels
             Parameters = new InitParameters();
             init = new initialVM();
             init.onContinue += Init_onContinue;
-            init.Update();
-
-            currency.Init();
+            init.Update();            
             #endregion
 
             #region commands

@@ -6,13 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using YWB.AntidetectAccountParser.Model.Accounts;
+using YWB.AntidetectAccountParser.Services.Currency;
 
 namespace YWB.AntidetectAccountParser.Model.Accounts
 {
     public class Info
     {
         const string postfix = "__info";
-        
+
+        #region vars
+        ICurrencyConverter converter;
+        #endregion
+
         [JsonProperty]
         public string Name { get; set; }
 
@@ -25,14 +30,48 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                 birthdate = value;
             }
         }
+        string spent;
         [JsonProperty]
-        public string Spent { get; set; }
+        public string Spent { 
+            get => spent;
+            set
+            {
+                spent = value;
+                SpentUSD = converter.Convert(spent, Currency);
+            }
+        }
+        [JsonProperty]
+        public string SpentUSD { get; set; }
+        [JsonProperty]
+        public string BaseCurrency { get; set; }
         [JsonProperty]
         public string Currency { get; set; }
+
+        string duty;
         [JsonProperty]
-        public string Duty { get; set; }
+        public string Duty { 
+            get => duty;
+            set
+            {
+                duty = value;
+                DutyUSD = converter.Convert(duty, Currency);
+            }
+        }
         [JsonProperty]
-        public string Limit { get; set; }
+        public string DutyUSD { get; set; }
+        [JsonProperty]
+        string limit;
+        public string Limit
+        {
+            get => limit;
+            set
+            {
+                limit = value;
+                LimitUSD = converter.Convert(limit, Currency);
+            }
+        }
+        [JsonProperty]
+        string LimitUSD { get; set; }
         [JsonProperty]
         public string Prepay { get; set; }
         [JsonProperty]
@@ -76,9 +115,13 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
         string path;
         public Info(FacebookAccount fa)
         {
+            converter = openexchangerates_org.getInstance();
+            BaseCurrency = converter.BaseCurrency;
+
             this.fa = fa;
             Name = "?";
-            BirthDate = "?";
+            BirthDate = "?";           
+            
         }
 
         private void LoadFromInfoString()
@@ -88,8 +131,8 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             try
             {
                 string[] splt = s.Split('_');
-                Spent = splt[0];
                 Currency = splt[1];
+                Spent = splt[0];                
                 Duty = splt[2];
                 Limit = splt[3];
                 Prepay = splt[4];
@@ -102,8 +145,8 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
 
             } catch (Exception ex)
             {
-                Spent = "?";
                 Currency = "?";
+                Spent = "?";                
                 Duty = "?";
                 Limit = "?";
                 Prepay = "?"; 
@@ -129,8 +172,8 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                 {
                     LoadFromInfoString();
                 } catch (Exception ex) {
-                    Spent = "?";
-                    Currency = "?";
+                    Currency = "?";                    
+                    Spent = "?";                    
                     Duty = "?";
                     Limit = "?";
                     Prepay = "?";
@@ -152,8 +195,9 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
 
             Name = p.Name;
             BirthDate = p.BirthDate;
-            Spent = p.Spent;
             Currency = p.Currency;
+            BaseCurrency = p.BaseCurrency;
+            Spent = p.Spent;              
             Duty = p.Duty;
             Limit = p.Limit;
             Prepay= p.Prepay;
