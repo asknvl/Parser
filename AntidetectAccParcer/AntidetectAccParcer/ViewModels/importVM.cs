@@ -54,7 +54,6 @@ namespace AntidetectAccParcer.ViewModels
             set => this.RaiseAndSetIfChanged(ref tags, value);
         }
 
-
         [JsonProperty]
         public ObservableCollection<string> SelectedTags { get; set; } = new ObservableCollection<string>();
 
@@ -194,8 +193,8 @@ namespace AntidetectAccParcer.ViewModels
             }
         }
 
-        string selectedPassword;
-        public string SelectedPassword
+        LoginPassword selectedPassword;
+        public LoginPassword SelectedPassword
         {
             get => selectedPassword;
             set
@@ -203,7 +202,7 @@ namespace AntidetectAccParcer.ViewModels
                 if (value == null)
                     return;
                 Clipboard clipboard = new();
-                clipboard.SetText(value);
+                clipboard.SetText(value.Password);
                 this.RaiseAndSetIfChanged(ref selectedPassword, value);
             }
         }

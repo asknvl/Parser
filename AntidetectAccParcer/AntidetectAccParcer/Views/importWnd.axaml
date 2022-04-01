@@ -360,28 +360,24 @@
 						Пароли:
 					</TextBlock>
 					<Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Margin="1">
-						<ListBox Grid.Row="1" Items="{Binding SelectedAccount.Account.LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single, Toggle" VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 2, 4, 0">
+						<ListBox Grid.Row="1" Items="{Binding SelectedAccount.Account.LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single" Margin="4, 2, 4, 0">
 							<ListBox.ItemTemplate>
-								<DataTemplate>
-									<!--<Grid Height="24">									
-										<TextBlock Text="{Binding}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
-									</Grid>-->
-									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="AnchorAndGravity" Height="24">
-										<TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Password}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2">
-											<ToolTip.Tip>
-												<Border BorderBrush="LightGray" BorderThickness="1">
-													<ListBox Items="{Binding Logins}" Margin="4">
-														<ListBox.Styles>
-															<Style Selector="ListBox TextBlock">
-																<Setter Property="FontWeight" Value="Bold"/>
-																<Setter Property="FontSize" Value="12"/>
-															</Style>
-														</ListBox.Styles>
-													</ListBox>
-												</Border>
-											</ToolTip.Tip>
-										</TextBlock>
-										<TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Note}" Grid.RowSpan="2" FontSize="12" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 0, 15, 0"/>
+								<DataTemplate>									
+									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="Pointer" Height="24">
+										<ToolTip.Tip>
+											<Border BorderBrush="LightGray" BorderThickness="1">
+												<ListBox Items="{Binding Logins}" Margin="4">
+													<ListBox.Styles>
+														<Style Selector="ListBox TextBlock">
+															<Setter Property="FontWeight" Value="Bold"/>
+															<Setter Property="FontSize" Value="12"/>
+														</Style>
+													</ListBox.Styles>
+												</ListBox>
+											</Border>
+										</ToolTip.Tip>
+										<TextBlock Grid.Column="0" Text="{Binding Password}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="2" Background="Transparent"/>
+										<TextBlock Grid.Column="1" Text="{Binding Note}" Grid.RowSpan="2" FontSize="12" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 0, 15, 0"/>
 									</Grid>
 								</DataTemplate>
 							</ListBox.ItemTemplate>

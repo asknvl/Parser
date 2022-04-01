@@ -60,11 +60,9 @@ namespace AntidetectAccParcer.Models.Archives
                     //                                  o.FullName.ToLower().Contains(".rar"));
 
 
-
-
-                    var splt = file.Split(Path.DirectorySeparatorChar);
-                    string s = splt.FirstOrDefault(p => p.Contains(".zip"));
-                    s = s.Replace(".zip", "");
+                    //var splt = file.Split(Path.DirectorySeparatorChar);
+                    //string s = splt.FirstOrDefault(p => p.Contains(".zip"));
+                    //s = s.Replace(".zip", "");
 
                     string zippath = archive.Entries[0].FullName;
                     char[] sep = new char[] { '\\', '/', Path.DirectorySeparatorChar };
@@ -86,7 +84,7 @@ namespace AntidetectAccParcer.Models.Archives
                     Directory.Move(Path.Combine(destination, zippath), litpath);
 
                     File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
-                    File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), s);
+                    File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), zippath);
                 }
                 File.Delete(file);
                 OnProgressEvent(++progress, files.Length);                
