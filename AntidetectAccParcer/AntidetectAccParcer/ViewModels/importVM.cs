@@ -314,7 +314,8 @@ namespace AntidetectAccParcer.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    errMsg(ex.Message);
+                    BrowserImport = false;
+                    errMsg("Не удалось загрузить прокси из браузера");
                 } finally
                 {
                     AllowProxyLoad = true;
@@ -331,7 +332,9 @@ namespace AntidetectAccParcer.ViewModels
                 AllowProxyLoad = false;
 
                 IsProxies = false;
-                Proxies.Clear();
+                //Proxies.Clear();
+                Proxies = new ObservableCollection<ProxyParameters>();
+
                 List<string> deadProxies = new List<string>();
                 foreach (Proxy proxy in proxies)
                 {
@@ -708,7 +711,17 @@ namespace AntidetectAccParcer.ViewModels
                 else
                 {
                     //есть хоть один аккаунт в виде папки            
-                    string tmp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "tmpaccs");
+                    //string input = filenames[0].Split(Path.DirectorySeparatorChar)[0];
+
+                    DirectoryInfo input = Directory.GetParent(filenames[0]);
+                    input = input.Parent;
+
+
+                    string parsed = Path.Combine(input.FullName, $"{input.Name}_parsed");
+
+                    //string tmp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "tmpaccs");
+                    string tmp = parsed;
+
                     if (Directory.Exists(tmp))
                         Directory.Delete(tmp, true);
                     Directory.CreateDirectory(tmp);

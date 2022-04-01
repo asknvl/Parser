@@ -91,10 +91,17 @@ namespace AntidetectAccParcer.Models.Archives
                 string c = $"{splt[6]}, {splt[7]}";
                 cards = c;
                 geo_rk = splt[8].ToUpper();
-                bm = splt[splt.Length - 4].ToLower();
-                bm = bm.Contains("bm") ? bm.Replace("bm", "") : "?";
-                fp = splt[splt.Length - 3].ToLower();
-                fp = fp.Contains("fp") ? fp.Replace("fp", "") : "?";
+                //bm = splt[splt.Length - 4].ToLower();
+                //bm = bm.Contains("bm") ? bm.Replace("bm", "") : "?";
+                //fp = splt[splt.Length - 3].ToLower();
+                //fp = fp.Contains("fp") ? fp.Replace("fp", "") : "?";
+                
+                var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm"));                
+                bm = (sbm != null) ? sbm.ToLower().Replace("bm", "") : "Нет";
+
+                var sfp = splt.FirstOrDefault(o => o.ToLower().Contains("fp"));
+                fp = (sfp != null) ? sfp.ToLower().Replace("fp", "") : "Нет";
+
                 geo_sc = splt[splt.Length - 2].ToUpper();
                 return combineDescription();
 

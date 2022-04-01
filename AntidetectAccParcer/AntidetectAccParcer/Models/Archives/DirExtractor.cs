@@ -21,7 +21,14 @@ namespace AntidetectAccParcer.Models.Archives
             foreach (var folder in dirs)
             {
 
+                if (folder.ToLower().Contains("macos"))
+                {
+                    Directory.Delete(folder);
+                    continue;
+                }
+
                 string[] files = Directory.GetFiles(folder);
+
                 var _info = files.FirstOrDefault(p => p.Contains("_info.json"));
                 if (_info != null)
                     continue;

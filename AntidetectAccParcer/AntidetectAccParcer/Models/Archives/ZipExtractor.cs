@@ -66,7 +66,13 @@ namespace AntidetectAccParcer.Models.Archives
                     string s = splt.FirstOrDefault(p => p.Contains(".zip"));
                     s = s.Replace(".zip", "");
 
-                    var description = getDescription(s);
+                    string zippath = archive.Entries[0].FullName;
+                    char[] sep = new char[] { '\\', '/', Path.DirectorySeparatorChar };
+                    var sp = zippath.Split(sep);
+                    zippath = sp[0];
+
+                    //var description = getDescription(s);
+                    var description = getDescription(zippath);
 
                     archive.ExtractToDirectory(destination, true);
 
@@ -76,7 +82,8 @@ namespace AntidetectAccParcer.Models.Archives
                     if (Directory.Exists(litpath))
                         Directory.Delete(litpath, true);
 
-                    Directory.Move(Path.Combine(destination, archive.Entries[0].FullName), litpath);
+                    //Directory.Move(Path.Combine(destination, archive.Entries[0].FullName), litpath);
+                    Directory.Move(Path.Combine(destination, zippath), litpath);
 
                     File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
                     File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), s);

@@ -21,29 +21,19 @@ namespace YWB.AntidetectAccountParser.Services.Currency
         public abstract bool Init();
 
         public string Convert(string svalue, string currencyCode)
-        {          
-
-            if (currencyCode == null)
-                return "?";
-
-            if (allToUsdRate.ContainsKey(currencyCode.ToUpperInvariant()))
+        {
+            string res = "?";
+            try
             {
-                string res = $"{svalue} {currencyCode}";
+                double dvalue = double.Parse(svalue.Replace(",", "."), NumberFormatInfo.InvariantInfo);
+                double rate = allToUsdRate[currencyCode];
+                double dres = dvalue / rate;
+                res = string.Format("{0:0.00}", dres);
 
-                try
-                {
-                    double dvalue = double.Parse(svalue.Replace(",", "."), NumberFormatInfo.InvariantInfo);
-                    double rate = allToUsdRate[currencyCode];
-                    double dres = dvalue / rate;
-                    res = string.Format("{0:0.00}", dres);
-
-                } catch {
-                                    
-                }
-                return res;
-            }                
-            else
-                throw new Exception("Не удалось определить курс");
+            } catch
+            {               
+            }
+            return res;            
         }
     }
 }

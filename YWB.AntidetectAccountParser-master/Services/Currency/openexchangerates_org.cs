@@ -29,7 +29,11 @@ namespace YWB.AntidetectAccountParser.Services.Currency
         }
 
         public override bool Init()
-        {           
+        {
+
+#if DEBUG
+#else
+
             string url = $"https://openexchangerates.org/api/";
             var rc = new RestClient(url);
             var r = new RestRequest($"latest.json?app_id=e55b8d2d17644044ba904305abe37033&{BaseCurrency}", Method.GET);
@@ -47,6 +51,7 @@ namespace YWB.AntidetectAccountParser.Services.Currency
                     }
                 }                
             });
+#endif
 
             return allToUsdRate.Count > 0;
         }

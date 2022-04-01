@@ -26,7 +26,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
         {
             var r = new RestRequest("tags", Method.GET);
             var json = await ExecuteRequestAsync<JObject>(r);
-            return json["data"].Select((dynamic g) => new AccountGroup()
+            return json["data"]?.Select((dynamic g) => new AccountGroup()
             {
                 Id = g.uuid,
                 Name = g.name
@@ -68,7 +68,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
             dynamic p = new JObject();
             p.title = pName;
             p.fingerprint = new JObject();
-            p.start_page = Encoding.UTF8.GetString(Encoding.Default.GetBytes("https://fb.com")); 
+            p.start_page = Encoding.UTF8.GetString(Encoding.Default.GetBytes("https://facebook.com")); 
 
             if (user_agent.Contains("Windows"))
                 os = "win";
