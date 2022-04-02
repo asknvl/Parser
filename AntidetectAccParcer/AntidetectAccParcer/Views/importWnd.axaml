@@ -49,9 +49,7 @@
 						</ItemsPanelTemplate>
 					</ListBox.ItemsPanel>
 					<ListBox.Styles>
-						<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
-							<!--<Setter Property="TextBlock.Foreground" Value="White"/>
-							<Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>-->
+						<Style Selector="ListBoxItem:selected /template/ ContentPresenter">							
 							<Setter Property="TextBlock.Foreground" Value="#FF2196F3"/>
 							<Setter Property="TextBlock.Background" Value="#0F2196F3"/>
 						</Style>
@@ -82,7 +80,7 @@
 						Прокси:
 					</TextBlock>
 					<Grid Grid.Row="1" ColumnDefinitions="*, *" Margin="1, 0, 2, 5" VerticalAlignment="Center" Height="32">
-						<RadioButton Grid.Column="0" IsChecked="{Binding BrowserImport}" Command="{Binding loadBrowserProxies}" Classes="Button" IsEnabled="{Binding AllowProxyLoad}" GroupName="1">
+						<RadioButton Name="BrowserRadioButton" Grid.Column="0" IsChecked="True" Command="{Binding loadBrowserProxies}" Classes="Button" GroupName="1">
 							<RadioButton.Styles>
 								<Style Selector="RadioButton.Button:checked">
 									<Setter Property="Margin" Value="0, 0, 0, 0"/>
@@ -98,7 +96,7 @@
 								Octo
 							</TextBlock>
 						</RadioButton>
-						<RadioButton Grid.Column="1" IsChecked="{Binding FileImport}" Command="{Binding loadFileProxies}" Classes="Button" IsEnabled="{Binding AllowProxyLoad}" GroupName="1">
+						<RadioButton Grid.Column="1" Command="{Binding loadFileProxies}" Classes="Button" GroupName="1">
 							<RadioButton.Styles>
 								<Style Selector="RadioButton.Button:checked">
 									<Setter Property="Margin" Value="1, 0, 0, 0"/>
@@ -116,8 +114,17 @@
 						</RadioButton>
 					</Grid>
 					<Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" Margin="1, 0, 1, 1">
-						<Grid RowDefinitions="Auto, *">
-							<CheckBox Grid.Row="0" IsChecked="{Binding IsAllProxyChecked}" Margin="4, 5, 0, 0">
+						<Grid RowDefinitions="Auto, Auto, *">
+							<Button Grid.Row="0" Command="{Binding massProxyImport}" Margin="6, 6, 6, 0" Foreground="White" Padding="2" IsVisible="{Binding FileImport}">
+								<Button.Styles>									
+									<Style Selector="Button TextBlock">										
+										<Setter Property="FontSize" Value="12"/>
+										<Setter Property="Margin" Value="0"/>										
+									</Style>									
+								</Button.Styles>
+								Массовый импорт
+							</Button>
+							<CheckBox Grid.Row="1" IsChecked="{Binding IsAllProxyChecked}" Margin="4, 5, 0, 0">
 								<CheckBox.Styles>
 									<Style Selector="TextBlock">
 										<Setter Property="FontWeight" Value="Bold"/>
@@ -125,7 +132,7 @@
 								</CheckBox.Styles>
 								Выбрать все
 							</CheckBox>
-							<ListBox Grid.Row="1" Items="{Binding Proxies}" SelectionMode="Multiple, Toggle" VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 0, 4, 0">
+							<ListBox Grid.Row="2" Items="{Binding Proxies}" SelectionMode="Multiple, Toggle" VirtualizationMode="None" HorizontalAlignment="Stretch" Margin="4, 0, 4, 0">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<Grid Height="24">

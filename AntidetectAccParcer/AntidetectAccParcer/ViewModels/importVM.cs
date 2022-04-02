@@ -1,4 +1,4 @@
-﻿using AntidetectAccParcer.Models.Browsers;
+using AntidetectAccParcer.Models.Browsers;
 using AntidetectAccParcer.Models.Proxies;
 using AntidetectAccParcer.Models.Storage;
 using ReactiveUI;
@@ -58,12 +58,17 @@ namespace AntidetectAccParcer.ViewModels
         public ObservableCollection<string> SelectedTags { get; set; } = new ObservableCollection<string>();
 
         ObservableCollection<ProxyParameters> proxies;
-        [JsonProperty]
         public ObservableCollection<ProxyParameters> Proxies
         {
             get => proxies;
             set => this.RaiseAndSetIfChanged(ref proxies, value);
         }
+        List<Proxy> massImportProxies { get; set; }
+        [JsonProperty]
+        public ObservableCollection<ProxyParameters> MassImportProxies { get; set; }
+        List<Proxy> browserProxies { get; set; }
+        [JsonProperty]
+        public ObservableCollection<ProxyParameters> BrowserProxies { get; set; }
 
         ObservableCollection<AccountVM> accounts;
         public ObservableCollection<AccountVM> Accounts
@@ -152,22 +157,7 @@ namespace AntidetectAccParcer.ViewModels
             get => allowExport;
             set => this.RaiseAndSetIfChanged(ref allowExport, value);
         }
-
-        private bool fileImport;
-        public bool FileImport
-        {
-            get => fileImport;
-            set => this.RaiseAndSetIfChanged(ref fileImport, value);
-        }
-
-        private bool browserImport;
-        public bool BrowserImport
-        {
-            get => browserImport;
-            set => this.RaiseAndSetIfChanged(ref browserImport, value);
-        }
-        private bool isBrowserProxy { get; set; }
-
+    
         int progress;
         public int Progress
         {
@@ -212,20 +202,20 @@ namespace AntidetectAccParcer.ViewModels
         {
             get => isDragTextVisible;
             set => this.RaiseAndSetIfChanged(ref isDragTextVisible, value);
-        }
-
-        bool allowProxyLoad = true;
-        public bool AllowProxyLoad
-        {
-            get => allowProxyLoad;
-            set => this.RaiseAndSetIfChanged(ref allowProxyLoad, value);
-        }
+        }             
 
         bool allowImport;
         public bool AllowImport
         {
             get => allowImport;
             set => this.RaiseAndSetIfChanged(ref allowImport, value);
+        }
+
+        bool fileImport;
+        public bool FileImport
+        {
+            get => fileImport;
+            set => this.RaiseAndSetIfChanged(ref fileImport, value);
         }
         #endregion
 
@@ -236,6 +226,7 @@ namespace AntidetectAccParcer.ViewModels
         public ReactiveCommand<Unit, Unit> loadAccounts { get; }
         public ReactiveCommand<Unit, Unit> exportAccounts { get; }
         public ReactiveCommand<Unit, Unit> copyData { get; set; }
+        public ReactiveCommand<Unit, Unit> massProxyImport { get; }
         #endregion
         public importVM()
         {
@@ -244,7 +235,6 @@ namespace AntidetectAccParcer.ViewModels
             fileProxyProvider = new FileProxyProvider();
             browser = new Octo();
             browserData = (IBrowserDataProvider)browser;
-            IProxyChecker checker = new ipwhoisProxyChecker();
             var ExtractorFactory = new ExtractorFactory();
 
             try
@@ -256,12 +246,12 @@ namespace AntidetectAccParcer.ViewModels
 
             #endregion
 
-            #region init
-            IsAllAccountsChecked = false;
-            IsDragTextVisible = true;
-            BrowserImport = true;
+            #region init            
+            IsDragTextVisible = true;            
             IsAllAccountsChecked = true;
-            AllowImport = true;
+            AllowImport = true;            
+
+            Task.Run(() => loadProxiesOcto());            
 
             Parameters = new InitParameters();
             init = new initialVM();
@@ -275,115 +265,42 @@ namespace AntidetectAccParcer.ViewModels
                 ws.ShowDialog(init, this);
             });
 
-            loadBrowserProxies = ReactiveCommand.CreateFromTask(async () =>
+            async void loadProxiesOcto()
             {
-
-                if (!AllowProxyLoad)
-                    return;
-
-                AllowProxyLoad = false;
-
-                List<Proxy> res = new List<Proxy>();
-                var t = storage.load();
-                var storedProxies = t.Proxies;
-
-                IsProxies = false;
-
                 try
                 {
-                    var b = await browserData.getProxiesAsync();
-                    res = b.ToList();
+                    browserProxies = await browserData.getProxiesAsync();
 
-                    Proxies = new ObservableCollection<ProxyParameters>();
-
-                    foreach (Proxy proxy in res)
-                    {
-                        ProxyParameters p = new ProxyParameters(proxy, checker);
-                        if (await p.Check())
-                        {
-                            var s = storedProxies?.FirstOrDefault(ps => ps.Proxy.Address.Equals(p.Proxy.Address) && ps.Proxy.Title.Equals(p.Proxy.Title));
-
-                            bool storedChecked = false;
-
-                            if (s != null)
-                            {
-                                storedChecked = s.IsChecked;
-                            }
-
-                            p.ProxyCheckedEvent += P_ProxyCheckedEvent;
-                            p.IsChecked = IsAllProxyChecked | storedChecked;
-                            Proxies.Add(p);
-                        }
-                    }
-
-                    isBrowserProxy = true;
-                } catch (Exception ex)
+                } catch
                 {
-                    BrowserImport = false;
                     errMsg("Не удалось загрузить прокси из браузера");
-                } finally
-                {
-                    AllowProxyLoad = true;
                 }
+            }
+
+            loadBrowserProxies = ReactiveCommand.CreateFromTask(async () =>
+            {
+                FileImport = false;
+                Proxies = BrowserProxies;
             });
 
             loadProxyVM vm = new loadProxyVM();
             vm.OnProxiesLoaded += async (proxies) =>
             {
-
-                if (!AllowProxyLoad)
-                    return;
-
-                AllowProxyLoad = false;
-
-                IsProxies = false;
-                //Proxies.Clear();
-                Proxies = new ObservableCollection<ProxyParameters>();
-
-                List<string> deadProxies = new List<string>();
-                foreach (Proxy proxy in proxies)
-                {
-
-                    ProxyParameters p = new ProxyParameters(proxy, checker);
-                    if (await p.Check())
-                    {
-                        p.ProxyCheckedEvent += P_ProxyCheckedEvent;
-                        p.IsChecked = IsAllProxyChecked;
-                        Proxies.Add(p);
-                    } else
-                    {
-                        deadProxies.Add($"{p.Proxy.Address}");
-                    }
-                }
-                if (deadProxies.Count > 0)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("Адреса");
-
-                    for (int i = 0; i < deadProxies.Count; i++)
-                    {
-                        string s = i < (deadProxies.Count - 1) ? "," : "";
-                        sb.Append($"{deadProxies[i]}{s}");
-                    }
-
-                    sb.AppendLine("неактивны");
-                    errMsg(sb.ToString());
-                }
-                isBrowserProxy = false;
-                AllowProxyLoad = true;
+                massImportProxies = proxies;
+                var t = storage.load();
+                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies);
+                Proxies = MassImportProxies;
             };
-            vm.OnCancel += () =>
+
+            massProxyImport = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (isBrowserProxy)
-                {
-                    FileImport = false;
-                    BrowserImport = true;
-                }
-            };
+                ws.ShowDialog(vm, this);
+            });
 
             loadFileProxies = ReactiveCommand.CreateFromTask(async () =>
             {
-                ws.ShowDialog(vm, this);
+                FileImport = true;
+                Proxies = MassImportProxies;
             });
 
             loadAccounts = ReactiveCommand.CreateFromTask(async () =>
@@ -395,9 +312,10 @@ namespace AntidetectAccParcer.ViewModels
                 IsAccounts = false;
                 string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
                 List<string> lpath = new List<string>() { path };
-                await Task.Run(() => { 
+                await Task.Run(() =>
+                {
                     OnDropEvent(lpath);
-                }); 
+                });
 
 
             });
@@ -638,6 +556,44 @@ namespace AntidetectAccParcer.ViewModels
 
             return profiles.Count;
         }
+
+        async Task<ObservableCollection<ProxyParameters>> getProxies(List<Proxy> loaded, ObservableCollection<ProxyParameters> stored)
+        {
+            List<ProxyParameters> res = new List<ProxyParameters>();
+            IProxyChecker checker = new ipwhoisProxyChecker();
+
+            List<Proxy>? tmp = (loaded != null) ? loaded : stored?.Select(o => o.Proxy).ToList();
+            if (tmp == null)
+                return new ObservableCollection<ProxyParameters>(res);
+
+            foreach (var proxy in tmp)
+            {
+                ProxyParameters p = new ProxyParameters(proxy, checker);
+
+                if (await p.Check())
+                {
+                    var s = stored?.FirstOrDefault(ps => ps.Proxy.Address.Equals(p.Proxy.Address) && ps.Proxy.Title.Equals(p.Proxy.Title));
+                    bool storedChecked = false;
+                    if (s != null)
+                    {
+                        storedChecked = s.IsChecked;
+                    }
+
+                    //p.ProxyCheckedEvent += P_ProxyCheckedEvent;
+                    p.ProxyCheckedEvent += (arg) => {
+                        IsProxies = res.Any(o => o.IsChecked);
+                    };
+
+                    p.IsChecked = IsAllProxyChecked | storedChecked;
+
+                    res = res.OrderBy(o => o.Proxy.Title).ToList();
+                    
+                    res.Add(p);
+                }
+            }
+            
+            return new ObservableCollection<ProxyParameters>(res);
+        }
         #endregion
 
         #region public
@@ -680,6 +636,9 @@ namespace AntidetectAccParcer.ViewModels
                 errMsg("Не удалось загрузить теги из браузера");
             }
 
+            BrowserProxies = await getProxies(browserProxies, t.BrowserProxies);
+            MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies);
+
             loadBrowserProxies.Execute();
 
         }
@@ -706,8 +665,8 @@ namespace AntidetectAccParcer.ViewModels
         }
         public async void OnDropEvent(List<string> filenames)
         {
-            try                
-            {                
+            try
+            {
                 DirectoryInfo input = Directory.GetParent(filenames[0]);
                 string tmp;
 
