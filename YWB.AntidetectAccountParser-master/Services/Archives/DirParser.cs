@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using YWB.AntidetectAccountParser.Model.Accounts;
 using YWB.AntidetectAccountParser.Model.Accounts.Actions;
 
@@ -11,12 +12,32 @@ namespace YWB.AntidetectAccountParser.Services.Archives
     {
         public List<string> Containers { get; set; }
 
-        public DirParser(/*List<string> dirs*/string fullDirPath)
+        int getNum(string name, string litera)
+        {
+            string tmp = name.Replace(litera, "");
+
+
+
+            return int.Parse(tmp);
+        }
+
+        public DirParser(/*List<string> dirs*/string fullDirPath, string litera)
         {
             DirectoryInfo di = new DirectoryInfo(fullDirPath);
 
-            var diArr = di.GetDirectories().OrderBy(p => p.LastAccessTime.Ticks);
-            //DirectoryInfo[] diArr = di.GetDirectories().OrderBy(p =>  int.Parse(new String(p.Name.Where(Char.IsDigit).ToArray())));
+            //var diArr = di.GetDirectories().OrderBy(p => p.LastAccessTime.Ticks);
+
+
+            //int.Parse(new String(p.Name.Where(Char.IsDigit).ToArray()))
+            //var diArr = di.GetDirectories().OrderBy(p =>  int.Parse(p.Name));
+
+            DirectoryInfo[] diArr = di.GetDirectories();
+
+            try
+            {
+                diArr = diArr.OrderBy(p => int.Parse(p.Name.Replace(litera, ""))).ToArray();
+
+            } catch { }
 
             List<string> dirs = new List<string>();
             foreach (var item in diArr)

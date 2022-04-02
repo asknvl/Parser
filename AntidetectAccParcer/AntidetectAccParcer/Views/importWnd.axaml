@@ -159,7 +159,7 @@
 						Аккаунты:
 					</TextBlock>
 					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="0, 0, 0, 5">
-						<Button Name="ImportButton" Grid.Column="0" Command="{Binding loadAccounts}" Margin="1" Foreground="White">
+						<Button Name="ImportButton" Grid.Column="0" Command="{Binding loadAccounts}" Margin="1" Foreground="White" IsEnabled="{Binding AllowImport}">
 							<TextBlock HorizontalAlignment="Center">
 								Импорт аккаунтов
 							</TextBlock>

@@ -75,6 +75,7 @@ namespace AntidetectAccParcer.Models.Archives
                     archive.ExtractToDirectory(destination, true);
 
                     string name = $"{litera}{startnumber++}";
+                    //string name = $"{startnumber++}";
                     string litpath = Path.Combine(destination, name);
 
                     if (Directory.Exists(litpath))
@@ -82,7 +83,7 @@ namespace AntidetectAccParcer.Models.Archives
 
                     //Directory.Move(Path.Combine(destination, archive.Entries[0].FullName), litpath);
                     Directory.Move(Path.Combine(destination, zippath), litpath);
-
+                    
                     File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
                     File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), zippath);
                 }

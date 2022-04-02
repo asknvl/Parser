@@ -20,9 +20,7 @@ namespace YWB.AntidetectAccountParser.Services.Parsers
         public IEnumerable<T> Parse(string path)
         {
             var apf = new ArchiveParserFactory<T>();
-
-            var ap = new DirParser<T>(path);//apf.GetArchiveParser(path);
-
+            var ap = new DirParser<T>(path, Litera);//apf.GetArchiveParser(path);
             List<T> accounts = new List<T>();
             //var proxyProvider = new FileProxyProvider(); //pfg
             //var proxies=proxyProvider.Get();

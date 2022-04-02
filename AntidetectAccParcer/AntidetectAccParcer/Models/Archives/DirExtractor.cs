@@ -23,7 +23,7 @@ namespace AntidetectAccParcer.Models.Archives
 
                 if (folder.ToLower().Contains("macos"))
                 {
-                    Directory.Delete(folder);
+                    Directory.Delete(folder, true);
                     continue;
                 }
 
@@ -37,17 +37,18 @@ namespace AntidetectAccParcer.Models.Archives
                 var description = getDescription(s);
 
                 string name = $"{litera}{startnumber++}";
+                //string name = $"{startnumber++}";
                 string litpath = Path.Combine(destination, name);
 
                 if (Directory.Exists(litpath))
                     Directory.Delete(litpath, true);
 
                 Directory.Move(folder, litpath);
-                Directory.GetCreationTime(litpath);
 
                 //File.WriteAllText(Path.Combine(litpath, "infostring.txt"), descriptions[0]);
                 File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
-                File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), s);
+                File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), s);               
+
                 OnProgressEvent(++progress, dirs.Length);
                 
             }

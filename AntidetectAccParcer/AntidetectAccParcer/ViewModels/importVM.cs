@@ -35,7 +35,7 @@ namespace AntidetectAccParcer.ViewModels
         IBrowserDataProvider browserData;
         IAccountsParser<FacebookAccount> parcer;
         List<AccountVM> memAccounts = new List<AccountVM>();
-        initialVM init;        
+        initialVM init;
         #endregion
 
         #region properties
@@ -218,7 +218,14 @@ namespace AntidetectAccParcer.ViewModels
         public bool AllowProxyLoad
         {
             get => allowProxyLoad;
-            set => this.RaiseAndSetIfChanged(ref allowProxyLoad, value);    
+            set => this.RaiseAndSetIfChanged(ref allowProxyLoad, value);
+        }
+
+        bool allowImport;
+        public bool AllowImport
+        {
+            get => allowImport;
+            set => this.RaiseAndSetIfChanged(ref allowImport, value);
         }
         #endregion
 
@@ -245,7 +252,6 @@ namespace AntidetectAccParcer.ViewModels
                 openexchangerates_org.getInstance().Init();
             } catch (Exception ex)
             {
-
             }
 
             #endregion
@@ -255,11 +261,12 @@ namespace AntidetectAccParcer.ViewModels
             IsDragTextVisible = true;
             BrowserImport = true;
             IsAllAccountsChecked = true;
+            AllowImport = true;
 
             Parameters = new InitParameters();
             init = new initialVM();
             init.onContinue += Init_onContinue;
-            init.Update();            
+            init.Update();
             #endregion
 
             #region commands
@@ -280,7 +287,7 @@ namespace AntidetectAccParcer.ViewModels
                 var t = storage.load();
                 var storedProxies = t.Proxies;
 
-                IsProxies = false;                
+                IsProxies = false;
 
                 try
                 {
@@ -310,8 +317,7 @@ namespace AntidetectAccParcer.ViewModels
                     }
 
                     isBrowserProxy = true;
-                }
-                catch (Exception ex)
+                } catch (Exception ex)
                 {
                     BrowserImport = false;
                     errMsg("Не удалось загрузить прокси из браузера");
@@ -344,8 +350,7 @@ namespace AntidetectAccParcer.ViewModels
                         p.ProxyCheckedEvent += P_ProxyCheckedEvent;
                         p.IsChecked = IsAllProxyChecked;
                         Proxies.Add(p);
-                    }
-                    else
+                    } else
                     {
                         deadProxies.Add($"{p.Proxy.Address}");
                     }
@@ -377,20 +382,20 @@ namespace AntidetectAccParcer.ViewModels
             };
 
             loadFileProxies = ReactiveCommand.CreateFromTask(async () =>
-            {                
+            {
                 ws.ShowDialog(vm, this);
             });
 
             loadAccounts = ReactiveCommand.CreateFromTask(async () =>
             {
-                IsAccounts = false;
-                string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
-                importAccounts(path);
-
                 //IsAccounts = false;
                 //string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
-                //List<string> lpath = new List<string>() { path };
-                //OnDropEvent(lpath);
+                //await importAccounts(path);
+
+                IsAccounts = false;
+                string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
+                List<string> lpath = new List<string>() { path };
+                OnDropEvent(lpath);
 
 
             });
@@ -410,8 +415,7 @@ namespace AntidetectAccParcer.ViewModels
                         }
                     });
                     exportResultMsg(res);
-                }
-                catch (Exception ex)
+                } catch (Exception ex)
                 {
                     errMsg(ex.Message);
                 }
@@ -456,8 +460,11 @@ namespace AntidetectAccParcer.ViewModels
                 }
             }
         }
-        async void importAccounts(string path)
+        async Task importAccounts(string path)
         {
+
+            AllowImport = false;
+
             if (path != null)
             {
                 IsDragTextVisible = false;
@@ -565,15 +572,15 @@ namespace AntidetectAccParcer.ViewModels
 
                     Progress = 0;
 
-                }
-                catch (Exception ex)
+                } catch (Exception ex)
                 {
                     errMsg(ex.Message);
                 }
 
-            }
-            else
+            } else
                 errMsg("Не выбрана директория с аккаунтами");
+
+            AllowImport = true;
         }
         void errMsg(string msg)
         {
@@ -637,8 +644,7 @@ namespace AntidetectAccParcer.ViewModels
             try
             {
                 SelectedAccount?.Restore();
-            }
-            catch (Exception ex)
+            } catch (Exception ex)
             {
                 errMsg(ex.Message);
             }
@@ -667,8 +673,7 @@ namespace AntidetectAccParcer.ViewModels
                     if (Tags.Contains(item))
                         SelectedTags.Add(item);
                 }
-            }
-            catch (Exception ex)
+            } catch (Exception ex)
             {
                 errMsg("Не удалось загрузить теги из браузера");
             }
@@ -697,30 +702,29 @@ namespace AntidetectAccParcer.ViewModels
             var chkd = Accounts?.Where(p => p.IsChecked == true).ToList();
             IsAccounts = (chkd != null & chkd.Count > 0);
         }
-
-        public void OnDropEvent(List<string> filenames)
+        public async void OnDropEvent(List<string> filenames)
         {
-            try
-            {
+            try                
+            {                
+                DirectoryInfo input = Directory.GetParent(filenames[0]);
+                string tmp;
+
                 //папка с аккаунтами в виде папок или архивов
                 if (filenames.Count == 1 && Directory.Exists(filenames[0]) && !Directory.GetFiles(filenames[0]).Any(o => o.Contains(".txt")))
                 {
-                    importAccounts(filenames[0]);
-                }
-                else
+                    tmp = Path.Combine(input.FullName, $"{new DirectoryInfo(filenames[0]).Name}_parsed");
+
+                    if (Directory.Exists(tmp))
+                        Directory.Delete(tmp, true);
+
+                    CopyDirectory(filenames[0], tmp, true);
+
+                    await importAccounts(tmp);
+                } else
                 {
-                    //есть хоть один аккаунт в виде папки            
-                    //string input = filenames[0].Split(Path.DirectorySeparatorChar)[0];
 
-                    DirectoryInfo input = Directory.GetParent(filenames[0]);
-                    input = input.Parent;
-
-
-                    string parsed = Path.Combine(input.FullName, $"{input.Name}_parsed");
-
-                    //string tmp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "tmpaccs");
-                    string tmp = parsed;
-
+                    string parsed = $"{input}_parsed";
+                    tmp = parsed;
                     if (Directory.Exists(tmp))
                         Directory.Delete(tmp, true);
                     Directory.CreateDirectory(tmp);
@@ -731,7 +735,7 @@ namespace AntidetectAccParcer.ViewModels
                         {
                             if (Directory.GetFiles(fn).Any(o => o.Contains(".txt")))
                             {
-                                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "tmpaccs", new DirectoryInfo(fn).Name);
+                                string path = Path.Combine(tmp, new DirectoryInfo(fn).Name);
                                 CopyDirectory(fn, path, true);
                             }
                         }
@@ -743,10 +747,9 @@ namespace AntidetectAccParcer.ViewModels
                         }
                     }
                     if (Directory.GetFiles(tmp).Length > 0 || Directory.GetDirectories(tmp).Length > 0)
-                        importAccounts(tmp);
+                        await importAccounts(tmp);
                 }
-            }
-            catch (Exception ex)
+            } catch (Exception ex)
             {
                 errMsg($"Не удалось импортировать аккаунты {ex.Message}");
             }

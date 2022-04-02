@@ -74,16 +74,16 @@ namespace AntidetectAccParcer.Models.Archives
                     //}
                     var description = getDescription(rarpath);
 
-                    string name = $"{litera}{startnumber++}";
+                    string name = $"{litera}{startnumber++}";                    
                     string litpath = Path.Combine(destination, name);
 
                     if (Directory.Exists(litpath))
                         Directory.Delete(litpath, true);
 
-                    Directory.Move(Path.Combine(destination, rarpath), litpath);                    
-
+                    Directory.Move(Path.Combine(destination, rarpath), litpath);
+                    
                     File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
-                    File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), rarpath);
+                    File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), rarpath);                    
                 }
                 File.Delete(file);
                 OnProgressEvent(++progress, files.Length);
