@@ -12,27 +12,10 @@ namespace YWB.AntidetectAccountParser.Services.Archives
     {
         public List<string> Containers { get; set; }
 
-        int getNum(string name, string litera)
-        {
-            string tmp = name.Replace(litera, "");
-
-
-
-            return int.Parse(tmp);
-        }
-
         public DirParser(/*List<string> dirs*/string fullDirPath, string litera)
         {
             DirectoryInfo di = new DirectoryInfo(fullDirPath);
-
-            //var diArr = di.GetDirectories().OrderBy(p => p.LastAccessTime.Ticks);
-
-
-            //int.Parse(new String(p.Name.Where(Char.IsDigit).ToArray()))
-            //var diArr = di.GetDirectories().OrderBy(p =>  int.Parse(p.Name));
-
             DirectoryInfo[] diArr = di.GetDirectories();
-
             try
             {
                 diArr = diArr.OrderBy(p => int.Parse(p.Name.Replace(litera, ""))).ToArray();
