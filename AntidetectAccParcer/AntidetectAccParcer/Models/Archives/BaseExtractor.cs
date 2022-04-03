@@ -91,23 +91,7 @@ namespace AntidetectAccParcer.Models.Archives
                 string c = $"{splt[6]}, {splt[7]}";
                 cards = c;
                 geo_rk = splt[8].ToUpper();
-                //bm = splt[splt.Length - 4].ToLower();
-                //bm = bm.Contains("bm") ? bm.Replace("bm", "") : "?";
-                //fp = splt[splt.Length - 3].ToLower();
-                //fp = fp.Contains("fp") ? fp.Replace("fp", "") : "?";
-
-                //int bmIndex = 0;
-                //var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm")); 
-                //if (sbm != null)
-                //    bmIndex = splt.ToList().IndexOf(sbm);
-                //bm = (sbm != null) ? sbm.ToLower().Replace("bm", "") : "Нет";
-                //int fpIndex = 0;                
-                //var sfp = splt.FirstOrDefault(o => o.ToLower().Contains("fp"));
-                //if (sfp != null)
-                //    fpIndex = splt.ToList().IndexOf(sfp);
-                //fp = (sfp != null) ? sfp.ToLower().Replace("fp", "") : "Нет";
-                //geo_sc = splt[Math.Max(bmIndex, fpIndex) + 1].Substring(0, 2).ToUpper();
-
+                
                 var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm"));
                 int bmIndex = 0;
                 if (sbm != null)
@@ -139,8 +123,6 @@ namespace AntidetectAccParcer.Models.Archives
                 geo_sc = (index > 0) ? splt[index + 1].ToUpper() : splt[9];
                 geo_sc = geo_sc.Substring(0, 2);
 
-
-
                 return combineDescription();
 
             } catch
@@ -153,7 +135,6 @@ namespace AntidetectAccParcer.Models.Archives
             {
                 if (input.ToLower().Contains("paranoid"))
                 {
-
                     var splt = input.Split('_');
                     status = splt[2].ToLower().Contains("act") ? "Активен" : "Неактивен";
                     var bms = splt[3].Split('(', ')');
