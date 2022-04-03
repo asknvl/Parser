@@ -325,6 +325,8 @@ namespace AntidetectAccParcer.ViewModels
 
                 IsAccounts = false;
                 string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
+                if (path == null)
+                    return;
                 List<string> lpath = new List<string>() { path };
                 await Task.Run(() =>
                 {

@@ -174,18 +174,19 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
 
         private string GetOctoApiToken()
         {
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var fullPath = Path.Combine(dir, FileName);
-            if (File.Exists(fullPath))
-            {
-                return File.ReadAllText(fullPath);
-            }
-            else
-            {
-                Console.Write("Enter your Octo browsers' API Token:");
-                var token = Console.ReadLine();
-                return token;
-            }
+            //var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //var fullPath = Path.Combine(dir, FileName);
+            //if (File.Exists(fullPath))
+            //{
+            //    return File.ReadAllText(fullPath);
+            //}
+            //else
+            //{
+            //    Console.Write("Enter your Octo browsers' API Token:");
+            //    var token = Console.ReadLine();
+            //    return token;
+            //}
+            return $"89634683683047aea2a242eaf2b852b4";
         }
     }
 }
