@@ -96,7 +96,7 @@
 								Octo
 							</TextBlock>
 						</RadioButton>
-						<RadioButton Grid.Column="1" Command="{Binding loadFileProxies}" Classes="Button" GroupName="1">
+						<RadioButton Grid.Column="1" Command="{Binding loadFileProxies}" Classes="Button" GroupName="1"  IsEnabled="{Binding AllowProxyChange}">
 							<RadioButton.Styles>
 								<Style Selector="RadioButton.Button:checked">
 									<Setter Property="Margin" Value="1, 0, 0, 0"/>

@@ -89,6 +89,9 @@ namespace AntidetectAccParcer.ViewModels
         }
         [JsonProperty]
         public bool IsAllProxyCheckedBrowserStore { get; set; }
+
+        bool needNotifyCheck { get; set; } = true;
+
         bool isAllProxyCheckedBrowser;        
         public bool IsAllProxyCheckedBrowser
         {
@@ -98,7 +101,8 @@ namespace AntidetectAccParcer.ViewModels
                 if (BrowserProxies != null && BrowserProxies.Count > 0)
                 {
                     foreach (var proxy in BrowserProxies)
-                        proxy.IsChecked = value;
+                        if (needNotifyCheck)
+                            proxy.IsChecked = value;
                 }
                 this.RaiseAndSetIfChanged(ref isAllProxyCheckedBrowser, value);
                 
@@ -116,11 +120,19 @@ namespace AntidetectAccParcer.ViewModels
                 if (MassImportProxies != null && MassImportProxies.Count > 0)
                 {
                     foreach (var proxy in MassImportProxies)
-                        proxy.IsChecked = value;
+                        if (needNotifyCheck)
+                            proxy.IsChecked = value;
                 }                
                 this.RaiseAndSetIfChanged(ref isAllProxyCheckedMass, value);
                
             }
+        }
+
+        bool allowProxyChange = false;
+        public bool AllowProxyChange
+        {
+            get => allowProxyChange;
+            set => this.RaiseAndSetIfChanged(ref allowProxyChange, value);
         }
 
         bool isAllAccountsChecked;
@@ -255,23 +267,14 @@ namespace AntidetectAccParcer.ViewModels
             fileProxyProvider = new FileProxyProvider();
             browser = new Octo();
             browserData = (IBrowserDataProvider)browser;
-            var ExtractorFactory = new ExtractorFactory();
-
-            try
-            {
-                openexchangerates_org.getInstance().Init();
-            } catch (Exception ex)
-            {
-            }
-
+            var ExtractorFactory = new ExtractorFactory();          
             #endregion
 
             #region init            
             IsDragTextVisible = true;            
             IsAllAccountsChecked = true;
             AllowImport = true;
-       
-            Task.Run(() => loadProxiesOcto());            
+            AllowProxyChange = false;
 
             Parameters = new InitParameters();
             init = new initialVM();
@@ -284,18 +287,6 @@ namespace AntidetectAccParcer.ViewModels
             {
                 ws.ShowDialog(init, this);
             });
-
-            async void loadProxiesOcto()
-            {
-                try
-                {
-                    browserProxies = await browserData.getProxiesAsync();
-
-                } catch
-                {
-                    errMsg("Не удалось загрузить прокси из браузера");
-                }
-            }
 
             loadBrowserProxies = ReactiveCommand.CreateFromTask(async () =>
             {
@@ -315,7 +306,7 @@ namespace AntidetectAccParcer.ViewModels
             };
 
             massProxyImport = ReactiveCommand.CreateFromTask(async () =>
-            {
+            {               
                 ws.ShowDialog(vm, this);
             });
 
@@ -634,10 +625,29 @@ namespace AntidetectAccParcer.ViewModels
             IsAllProxyCheckedMassStore = IsAllProxyCheckedMass;
             storage.save(this);
         }
+       
+
         public async void onStart()
         {
-            var t = storage.load();          
+            var t = storage.load();
             Parameters = t.parameters;
+
+            try
+            {
+                openexchangerates_org.getInstance().Init();
+            } catch (Exception ex)
+            {
+                errMsg("Не удалось загрузить курсы валют");
+            }
+
+            try
+            {
+                browserProxies = await browserData.getProxiesAsync();
+
+            } catch
+            {
+                errMsg("Не удалось загрузить прокси из браузера");
+            }
 
             try
             {
@@ -660,11 +670,12 @@ namespace AntidetectAccParcer.ViewModels
 
             BrowserProxies = await getProxies(browserProxies, t.BrowserProxies, IsAllProxyCheckedBrowser, BrowserProxyCheckedEvent);
             MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent);
-
-            //IsAllProxyCheckedBrowser = t.IsAllProxyCheckedBrowserStore;
-            //IsAllProxyCheckedMass = t.IsAllProxyCheckedMassStore;
+            BrowserProxyCheckedEvent(null);
+            MassProxyCheckedEvent(null);
 
             loadBrowserProxies.Execute();
+
+            AllowProxyChange = true;
 
         }
         #endregion
@@ -680,14 +691,44 @@ namespace AntidetectAccParcer.ViewModels
         private void BrowserProxyCheckedEvent(ProxyParameters obj)
         {
             if (BrowserProxies != null)
-                IsProxies = BrowserProxies.Any(p => p.IsChecked);               
+            {
+                IsProxies = BrowserProxies.Any(p => p.IsChecked);
+                int cnt = BrowserProxies.Count(p => p.IsChecked);
+                if (IsAllProxyCheckedBrowser && cnt < BrowserProxies.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllProxyCheckedBrowser = false;
+                    needNotifyCheck = true;
+                }
+                if (!IsAllProxyCheckedBrowser && cnt == BrowserProxies.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllProxyCheckedBrowser = true;
+                    needNotifyCheck = true;
+                }
+            }
             
             
         }
         private void MassProxyCheckedEvent(ProxyParameters obj)
         {
-            if (MassImportProxies!=null)
+            if (MassImportProxies != null)
+            {
                 IsProxies = MassImportProxies.Any(p => p.IsChecked);
+                int cnt = MassImportProxies.Count(p => p.IsChecked);
+                if (IsAllProxyCheckedMass && cnt < MassImportProxies.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllProxyCheckedMass = false;
+                    needNotifyCheck = true;
+                }
+                if (!IsAllProxyCheckedMass && cnt == MassImportProxies.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllProxyCheckedMass = true;
+                    needNotifyCheck = true;
+                }
+            }
         }
         private void A_OnAccountChecked(AccountVM obj)
         {
