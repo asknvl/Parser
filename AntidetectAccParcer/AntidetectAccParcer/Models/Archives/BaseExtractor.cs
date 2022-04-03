@@ -95,14 +95,52 @@ namespace AntidetectAccParcer.Models.Archives
                 //bm = bm.Contains("bm") ? bm.Replace("bm", "") : "?";
                 //fp = splt[splt.Length - 3].ToLower();
                 //fp = fp.Contains("fp") ? fp.Replace("fp", "") : "?";
-                
-                var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm"));                
-                bm = (sbm != null) ? sbm.ToLower().Replace("bm", "") : "Нет";
+
+                //int bmIndex = 0;
+                //var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm")); 
+                //if (sbm != null)
+                //    bmIndex = splt.ToList().IndexOf(sbm);
+                //bm = (sbm != null) ? sbm.ToLower().Replace("bm", "") : "Нет";
+                //int fpIndex = 0;                
+                //var sfp = splt.FirstOrDefault(o => o.ToLower().Contains("fp"));
+                //if (sfp != null)
+                //    fpIndex = splt.ToList().IndexOf(sfp);
+                //fp = (sfp != null) ? sfp.ToLower().Replace("fp", "") : "Нет";
+                //geo_sc = splt[Math.Max(bmIndex, fpIndex) + 1].Substring(0, 2).ToUpper();
+
+                var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm"));
+                int bmIndex = 0;
+                if (sbm != null)
+                {
+                    bm = sbm.ToLower().Replace("bm", "");                    
+                    int ibm;
+                    if (int.TryParse(bm, out ibm))
+                    {
+                        bmIndex = splt.ToList().IndexOf(sbm);
+                    } else bm = "Нет";
+                } else
+                    bm = "Heт";
 
                 var sfp = splt.FirstOrDefault(o => o.ToLower().Contains("fp"));
-                fp = (sfp != null) ? sfp.ToLower().Replace("fp", "") : "Нет";
+                int fpIndex = 0;
+                if (sfp != null)
+                {
+                    fp = sfp.ToLower().Replace("fp", "");
+                    int ifp;
+                    if (int.TryParse(fp, out ifp))
+                    {
+                        fpIndex = splt.ToList().IndexOf(sfp);
+                    } else fp = "Нет";
+                } else
+                    fp = "Heт";
 
-                geo_sc = splt[splt.Length - 2].ToUpper();
+                int index = Math.Max(bmIndex, fpIndex);
+
+                geo_sc = (index > 0) ? splt[index + 1].ToUpper() : splt[9];
+                geo_sc = geo_sc.Substring(0, 2);
+
+
+
                 return combineDescription();
 
             } catch

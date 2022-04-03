@@ -242,14 +242,14 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Имя:\t{Name}");
             sb.AppendLine($"ДР:\t{BirthDate}");
-            if (!Spent.Equals("?"))
-                sb.AppendLine($"Спенд:\t{Spent}");
             if (!Currency.Equals("?"))
-                sb.AppendLine($"Валюта:\t{Currency}");
+                sb.AppendLine($"Валюта:\t{Currency}\tUSD");
+            if (!Spent.Equals("?"))
+                sb.AppendLine($"Спенд:\t{Spent}\t{SpentUSD}");            
             if (!Duty.Equals("?"))
-                sb.AppendLine($"Долг:\t{Duty}");
+                sb.AppendLine($"Долг:\t{Duty}\t{DutyUSD}");
             if (!Limit.Equals("?"))
-                sb.AppendLine($"Лимит:\t{Limit}");
+                sb.AppendLine($"Лимит:\t{Limit}\t{LimitUSD}");
             if (!Prepay.Equals("?"))
                 sb.AppendLine($"Предоплата:\t{Prepay}");
             if (!Status.Equals("?"))
@@ -265,7 +265,7 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             if (!FP.Equals("?"))
                 sb.AppendLine($"ФП:\t{FP}");
             sb.AppendLine($"");
-            sb.AppendLine($"{fa.AccountInfoString}");
+            sb.AppendLine($"{fa.DisplayInfoString}");
             sb.AppendLine($"");
             sb.AppendLine($"{UserAgent}");
             sb.AppendLine($"");
