@@ -87,19 +87,39 @@ namespace AntidetectAccParcer.ViewModels
                 this.RaiseAndSetIfChanged(ref selectedAccount, value);
             }
         }
-
-        bool isAllProxyChecked;
-        public bool IsAllProxyChecked
+        [JsonProperty]
+        public bool IsAllProxyCheckedBrowserStore { get; set; }
+        bool isAllProxyCheckedBrowser;        
+        public bool IsAllProxyCheckedBrowser
         {
-            get => isAllProxyChecked;
+            get => isAllProxyCheckedBrowser;
             set
             {
-                if (Proxies != null && Proxies.Count > 0)
+                if (BrowserProxies != null && BrowserProxies.Count > 0)
                 {
-                    foreach (var proxy in Proxies)
+                    foreach (var proxy in BrowserProxies)
                         proxy.IsChecked = value;
                 }
-                this.RaiseAndSetIfChanged(ref isAllProxyChecked, value);
+                this.RaiseAndSetIfChanged(ref isAllProxyCheckedBrowser, value);
+                
+            }
+        }
+
+        [JsonProperty]
+        public bool IsAllProxyCheckedMassStore { get; set; }
+        bool isAllProxyCheckedMass;        
+        public bool IsAllProxyCheckedMass
+        {
+            get => isAllProxyCheckedMass;
+            set
+            {
+                if (MassImportProxies != null && MassImportProxies.Count > 0)
+                {
+                    foreach (var proxy in MassImportProxies)
+                        proxy.IsChecked = value;
+                }                
+                this.RaiseAndSetIfChanged(ref isAllProxyCheckedMass, value);
+               
             }
         }
 
@@ -249,8 +269,8 @@ namespace AntidetectAccParcer.ViewModels
             #region init            
             IsDragTextVisible = true;            
             IsAllAccountsChecked = true;
-            AllowImport = true;            
-
+            AllowImport = true;
+       
             Task.Run(() => loadProxiesOcto());            
 
             Parameters = new InitParameters();
@@ -281,6 +301,7 @@ namespace AntidetectAccParcer.ViewModels
             {
                 FileImport = false;
                 Proxies = BrowserProxies;
+                IsProxies = Proxies.Any(p => p.IsChecked);
             });
 
             loadProxyVM vm = new loadProxyVM();
@@ -288,8 +309,9 @@ namespace AntidetectAccParcer.ViewModels
             {
                 massImportProxies = proxies;
                 var t = storage.load();
-                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies);
+                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent);
                 Proxies = MassImportProxies;
+                IsProxies = Proxies.Any(p => p.IsChecked);
             };
 
             massProxyImport = ReactiveCommand.CreateFromTask(async () =>
@@ -301,6 +323,7 @@ namespace AntidetectAccParcer.ViewModels
             {
                 FileImport = true;
                 Proxies = MassImportProxies;
+                IsProxies = Proxies.Any(p => p.IsChecked);
             });
 
             loadAccounts = ReactiveCommand.CreateFromTask(async () =>
@@ -557,7 +580,10 @@ namespace AntidetectAccParcer.ViewModels
             return profiles.Count;
         }
 
-        async Task<ObservableCollection<ProxyParameters>> getProxies(List<Proxy> loaded, ObservableCollection<ProxyParameters> stored)
+        async Task<ObservableCollection<ProxyParameters>> getProxies(List<Proxy> loaded, 
+                                                                     ObservableCollection<ProxyParameters> stored,
+                                                                     bool allChecked,
+                                                                     Action<ProxyParameters> onChecked)
         {
             List<ProxyParameters> res = new List<ProxyParameters>();
             IProxyChecker checker = new ipwhoisProxyChecker();
@@ -579,19 +605,14 @@ namespace AntidetectAccParcer.ViewModels
                         storedChecked = s.IsChecked;
                     }
 
-                    //p.ProxyCheckedEvent += P_ProxyCheckedEvent;
-                    p.ProxyCheckedEvent += (arg) => {
-                        IsProxies = res.Any(o => o.IsChecked);
-                    };
-
-                    p.IsChecked = IsAllProxyChecked | storedChecked;
-
-                    res = res.OrderBy(o => o.Proxy.Title).ToList();
+                    p.ProxyCheckedEvent += onChecked;
+                    p.IsChecked = allChecked | storedChecked;                    
                     
                     res.Add(p);
                 }
             }
-            
+
+            res = res.OrderBy(o => o.Proxy.Title).ToList();
             return new ObservableCollection<ProxyParameters>(res);
         }
         #endregion
@@ -609,12 +630,13 @@ namespace AntidetectAccParcer.ViewModels
         }
         public void onClose()
         {
+            IsAllProxyCheckedBrowserStore = IsAllProxyCheckedBrowser;
+            IsAllProxyCheckedMassStore = IsAllProxyCheckedMass;
             storage.save(this);
         }
         public async void onStart()
         {
-            var t = storage.load();
-
+            var t = storage.load();          
             Parameters = t.parameters;
 
             try
@@ -636,8 +658,11 @@ namespace AntidetectAccParcer.ViewModels
                 errMsg("Не удалось загрузить теги из браузера");
             }
 
-            BrowserProxies = await getProxies(browserProxies, t.BrowserProxies);
-            MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies);
+            BrowserProxies = await getProxies(browserProxies, t.BrowserProxies, IsAllProxyCheckedBrowser, BrowserProxyCheckedEvent);
+            MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent);
+
+            //IsAllProxyCheckedBrowser = t.IsAllProxyCheckedBrowserStore;
+            //IsAllProxyCheckedMass = t.IsAllProxyCheckedMassStore;
 
             loadBrowserProxies.Execute();
 
@@ -652,11 +677,17 @@ namespace AntidetectAccParcer.ViewModels
             Parameters.StartNumber = p.StartNumber;
             Parameters.OS = p.OS;
         }
-        private void P_ProxyCheckedEvent(ProxyParameters obj)
+        private void BrowserProxyCheckedEvent(ProxyParameters obj)
         {
-            var chkd = Proxies?.Where(p => p.IsChecked == true).ToList();
-            IsProxies = (chkd != null & chkd.Count > 0);
-
+            if (BrowserProxies != null)
+                IsProxies = BrowserProxies.Any(p => p.IsChecked);               
+            
+            
+        }
+        private void MassProxyCheckedEvent(ProxyParameters obj)
+        {
+            if (MassImportProxies!=null)
+                IsProxies = MassImportProxies.Any(p => p.IsChecked);
         }
         private void A_OnAccountChecked(AccountVM obj)
         {

@@ -124,7 +124,15 @@
 								</Button.Styles>
 								Массовый импорт
 							</Button>
-							<CheckBox Grid.Row="1" IsChecked="{Binding IsAllProxyChecked}" Margin="4, 5, 0, 0">
+							<CheckBox Grid.Row="1" IsChecked="{Binding IsAllProxyCheckedBrowser}" Margin="4, 5, 0, 0" IsVisible="{Binding !FileImport}">
+								<CheckBox.Styles>
+									<Style Selector="TextBlock">
+										<Setter Property="FontWeight" Value="Bold"/>
+									</Style>
+								</CheckBox.Styles>
+								Выбрать все
+							</CheckBox>
+							<CheckBox Grid.Row="1" IsChecked="{Binding IsAllProxyCheckedMass}" Margin="4, 5, 0, 0" IsVisible="{Binding FileImport}">
 								<CheckBox.Styles>
 									<Style Selector="TextBlock">
 										<Setter Property="FontWeight" Value="Bold"/>

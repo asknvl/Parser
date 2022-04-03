@@ -92,7 +92,7 @@ namespace AntidetectAccParcer.ViewModels
             #region commands
             cancelCmd = ReactiveCommand.Create(() =>
             {
-                OnCancel.Invoke();
+                OnCancel?.Invoke();
                 OnCloseRequest();
             });
 

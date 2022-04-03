@@ -135,14 +135,10 @@ namespace AntidetectAccParcer
             wnd.Closed += (s, e) =>
             {
                 var p = windowList.FirstOrDefault(w => w.DataContext == parent);
-
-                if (windowList.Count <= 2)
+                p.IsEnabled = true;
+                if (p is importWnd)
                 {
-                    p.IsEnabled = true;
-                    if (p is importWnd)
-                    {
-                        ((importWnd)p).overlayGrid.IsVisible = false;
-                    }
+                    ((importWnd)p).overlayGrid.IsVisible = false;
                 }
             };
             vm.onCloseRequest += () =>
