@@ -115,7 +115,7 @@
 					</Grid>
 					<Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" Margin="1, 0, 1, 1">
 						<Grid RowDefinitions="Auto, Auto, *">
-							<Button Grid.Row="0" Command="{Binding massProxyImport}" Margin="6, 6, 6, 0" Foreground="White" Padding="2" IsVisible="{Binding FileImport}">
+							<Button Grid.Row="0" Command="{Binding massProxyImport}" Margin="5, 6, 5, 0" Foreground="White" Padding="3" IsVisible="{Binding FileImport}">
 								<Button.Styles>									
 									<Style Selector="Button TextBlock">										
 										<Setter Property="FontSize" Value="12"/>
