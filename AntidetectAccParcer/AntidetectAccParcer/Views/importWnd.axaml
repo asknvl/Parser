@@ -184,7 +184,10 @@
 					</Grid>
 					<Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="1, 0, 1, 1">
 						<TextBox Text="{Binding SearchName}" Watermark="Поиск">
-							<TextBox.Styles>								
+							<TextBox.Styles>
+								<Style Selector="TextBox ContentPresenter">
+									<Setter Property="VerticalContentAlignment" Value="Center"/>
+								</Style>
 								<Style Selector="TextBox:focus Border">
 									<Setter Property="BorderBrush" Value="#822196F3"/>
 								</Style>
@@ -372,13 +375,16 @@
 						</ScrollViewer>
 					</Border>
 				</Grid>
-				<Grid Grid.Column="3" RowDefinitions="24, 40, *" Margin="10">
-					<TextBlock Grid.Row="0" VerticalAlignment="Center">
+				<Grid Grid.Column="3" RowDefinitions="24, Auto, *" Margin="10">
+					<TextBlock Grid.Row="0" VerticalAlignment="Center">						
 						Пароли:
 					</TextBlock>
-					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="1, 0, 1, 1">
-						<TextBox Text="{Binding SearchPassword}" Watermark="Поиск">
+					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="1, 0, 1, 2">
+						<TextBox Text="{Binding SearchPassword}" Watermark="Поиск">							
 							<TextBox.Styles>
+								<Style Selector="TextBox ContentPresenter">
+									<Setter Property="VerticalContentAlignment" Value="Center"/>
+								</Style>
 								<Style Selector="TextBox:focus Border">
 									<Setter Property="BorderBrush" Value="#822196F3"/>
 								</Style>

@@ -211,9 +211,6 @@
     <PackageReference Include="RestSharp" Version="106.15.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\YWB.AntidetectAccountParser-master\YWB.AntidetectAccountParser.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="DialogHost.Avalonia">
       <HintPath>libs\DialogHost.Avalonia.dll</HintPath>
     </Reference>
@@ -228,6 +225,9 @@
     </Reference>
     <Reference Include="Material.Styles">
       <HintPath>libs\Material.Styles.dll</HintPath>
+    </Reference>
+    <Reference Include="YWB.AntidetectAccountParser">
+      <HintPath>libs\YWB.AntidetectAccountParser.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

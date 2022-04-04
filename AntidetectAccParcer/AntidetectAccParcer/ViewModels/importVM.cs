@@ -217,10 +217,14 @@ namespace AntidetectAccParcer.ViewModels
             set
             {
 
-                if (!value.Equals(""))
-                    LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.Contains(value)));
-                else
-                    LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords);
+                if (LoginsPasswords != null)
+                {
+
+                    if (!value.Equals(""))
+                        LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.Contains(value)));
+                    else
+                        LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords);
+                }
 
                 this.RaiseAndSetIfChanged(ref searchPassword, value);
                 //else
