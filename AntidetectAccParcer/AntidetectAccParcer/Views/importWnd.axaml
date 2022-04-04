@@ -372,12 +372,26 @@
 						</ScrollViewer>
 					</Border>
 				</Grid>
-				<Grid Grid.Column="3" RowDefinitions="24, *" Margin="10">
+				<Grid Grid.Column="3" RowDefinitions="24, 40, *" Margin="10">
 					<TextBlock Grid.Row="0" VerticalAlignment="Center">
 						Пароли:
 					</TextBlock>
-					<Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" Margin="1">
-						<ListBox Grid.Row="1" Items="{Binding SelectedAccount.Account.LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single" Margin="4, 2, 4, 0">
+					<Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="1, 0, 1, 1">
+						<TextBox Text="{Binding SearchPassword}" Watermark="Поиск">
+							<TextBox.Styles>
+								<Style Selector="TextBox:focus Border">
+									<Setter Property="BorderBrush" Value="#822196F3"/>
+								</Style>
+							</TextBox.Styles>
+							<TextBox.InnerRightContent>
+								<!--<Button Command="{Binding searchCmd}" Classes="Flat" Padding="4" Width="{Binding $self.Bounds.Height}"
+										Content="{avalonia:MaterialIconExt Search, Size=24}"/>-->
+								<ContentControl Content="{avalonia:MaterialIconExt Search, Size=24}" Foreground="LightGray" Margin="0, 0, 3, 0"/>
+							</TextBox.InnerRightContent>
+						</TextBox>
+					</Grid>
+					<Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" Margin="1">
+						<ListBox Grid.Row="1" Items="{Binding LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single" Margin="4, 2, 4, 0">
 							<ListBox.ItemTemplate>
 								<DataTemplate>									
 									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="Pointer" ToolTip.ShowDelay="0" Height="24">

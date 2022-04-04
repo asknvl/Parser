@@ -87,6 +87,11 @@ namespace AntidetectAccParcer.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref selectedAccount, value);
+                if (selectedAccount != null)
+                {
+                    LoginsPasswords = new ObservableCollection<LoginPassword>(selectedAccount.Account.LoginsPasswords);
+                    SearchPassword = "";
+                }
             }
         }
         [JsonProperty]
@@ -195,6 +200,32 @@ namespace AntidetectAccParcer.ViewModels
         {
             get => progress;
             set => this.RaiseAndSetIfChanged(ref progress, value);
+        }
+
+        ObservableCollection<LoginPassword> loginsPasswords;
+        ObservableCollection<LoginPassword> LoginsPasswords
+        {
+            get => loginsPasswords;
+            set => this.RaiseAndSetIfChanged(ref loginsPasswords, value);
+        }
+
+
+        string searchPassword;
+        public string SearchPassword
+        {
+            get => searchPassword;
+            set
+            {
+
+                if (!value.Equals(""))
+                    LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.Contains(value)));
+                else
+                    LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords);
+
+                this.RaiseAndSetIfChanged(ref searchPassword, value);
+                //else
+                //    Accounts = memAccounts;
+            }
         }
 
         string searchName;
