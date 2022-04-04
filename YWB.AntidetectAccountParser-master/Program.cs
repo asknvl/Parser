@@ -25,7 +25,7 @@ namespace YWB.AntidetectAccountParser
             var apf = new AccountsParserFactory();
             var parser = apf.CreateParser();
 
-            var accounts = parser.Parse(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "logs"));
+            var accounts = parser.Parse(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "logs"), null);
 
             if (accounts.Count() == 0)
             {
@@ -62,7 +62,7 @@ namespace YWB.AntidetectAccountParser
                 };
                 var selectedBrowser = SelectHelper.Select(browsers, b => b.Key).Value();
 
-                var profiles = await selectedBrowser.ImportAccountsAsync(accounts.ToList(), "Win", new string[] { "test" }, null); // pfg
+                var profiles = await selectedBrowser.ImportAccountsAsync(accounts.ToList(), "Win", new string[] { "test" }, null, null); // pfg
 
                 if (accounts?.All(a => a is FacebookAccount && !string.IsNullOrEmpty((a as FacebookAccount).Token)) ?? false)
                 {

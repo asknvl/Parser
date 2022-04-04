@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using YWB.AntidetectAccountParser.Model.Accounts;
 using YWB.AntidetectAccountParser.Model.Accounts.Actions;
 using YWB.AntidetectAccountParser.Services.Archives;
@@ -17,7 +18,7 @@ namespace YWB.AntidetectAccountParser.Services.Parsers
 
         public event System.Action<int, int> ParceEvent;
 
-        public IEnumerable<T> Parse(string path)
+        public IEnumerable<T> Parse(string path, CancellationTokenSource cts)
         {
             var apf = new ArchiveParserFactory<T>();
             var ap = new DirParser<T>(path, Litera);//apf.GetArchiveParser(path);
@@ -27,6 +28,8 @@ namespace YWB.AntidetectAccountParser.Services.Parsers
 
             for (int i = 0; i < ap.Containers.Count; i++)
             {
+                cts?.Token.ThrowIfCancellationRequested();
+
                 string archive = ap.Containers[i];
                 var actions = GetActions(archive);
                 var acc = ap.Parse(actions, archive);  

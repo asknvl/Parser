@@ -165,7 +165,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
             return res["data"].ToString();
         }
 
-        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress)
+        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts)
         {
             var profiles = new List<(string, string)>();
             Console.WriteLine("Choose operating system:");

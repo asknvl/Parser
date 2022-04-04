@@ -11,6 +11,7 @@ namespace YWB.AntidetectAccountParser.Model
         private string _type;
 
         [JsonProperty]
+        public int Number { get; set; }
         public string Title { get; set; }
         public string Source { get; set; }
         [JsonProperty]

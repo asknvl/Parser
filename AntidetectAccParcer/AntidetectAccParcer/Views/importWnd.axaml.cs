@@ -12,6 +12,8 @@ namespace AntidetectAccParcer.Views
     public partial class importWnd : Window
     {
 
+        Grid statusGrid;
+
         Grid mainGrid;
         Grid dragContent;
 
@@ -28,6 +30,9 @@ namespace AntidetectAccParcer.Views
         public importWnd()
         {
             InitializeComponent();
+
+            statusGrid = this.FindControl<Grid>("StatusGrid");
+            statusGrid.PointerPressed += StatusGrid_PointerPressed;
 
             mainGrid = this.FindControl<Grid>("MainGrid");
             mainGrid.PointerPressed += MainGrid_PointerPressed;
@@ -67,6 +72,11 @@ namespace AntidetectAccParcer.Views
 #endif
         }
 
+        private void StatusGrid_PointerPressed(object? sender, PointerPressedEventArgs e)
+        {
+            ((importVM)DataContext)?.OnStopRequest();
+        }
+
         private void MainGrid_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
         {
             mainGrid.Focus();                     
@@ -84,19 +94,18 @@ namespace AntidetectAccParcer.Views
 
         private void InfoBorder_LostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-           
-#if DEBUG
-            ((importVM)DataContext).SelectedAccount.Account.Info.Save();
-#else
 
-            try
-            {
-                ((importVM)DataContext).SelectedAccount.Account.Info.Save();
-            } catch (Exception ex)
-            {
+            ((importVM)DataContext).SelectedAccount?.Account.Info.Save();            
 
-            }
-#endif
+
+            //try
+            //{
+            //    ((importVM)DataContext).SelectedAccount.Account.Info.Save();
+            //} catch (Exception ex)
+            //{
+
+            //}            
+
         }
 
         private void TagsListBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)

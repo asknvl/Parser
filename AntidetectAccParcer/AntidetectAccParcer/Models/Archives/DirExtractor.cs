@@ -10,7 +10,7 @@ namespace AntidetectAccParcer.Models.Archives
 {
     internal class DirExtractor : BaseExtractor
     {
-        public override void Extract(string source, string destination, string litera, ref int startnumber)
+        public override void Extract(string source, string destination, string litera, ref int startnumber, CancellationTokenSource cts)
         {
             var dirs = Directory.GetDirectories(source);
             if (dirs == null || dirs.Length == 0)
@@ -20,6 +20,8 @@ namespace AntidetectAccParcer.Models.Archives
 
             foreach (var folder in dirs)
             {
+
+                cts?.Token.ThrowIfCancellationRequested();
 
                 if (folder.ToLower().Contains("macos"))
                 {
@@ -36,21 +38,18 @@ namespace AntidetectAccParcer.Models.Archives
                 string s = new DirectoryInfo(folder).Name;
                 var description = getDescription(s);
 
-                string name = $"{litera}{startnumber++}";
-                //string name = $"{startnumber++}";
+                string name = $"{litera}{startnumber++}";                
                 string litpath = Path.Combine(destination, name);
 
                 if (Directory.Exists(litpath))
                     Directory.Delete(litpath, true);
 
                 Directory.Move(folder, litpath);
-
-                //File.WriteAllText(Path.Combine(litpath, "infostring.txt"), descriptions[0]);
+                                
                 File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);
                 File.WriteAllText(Path.Combine(litpath, "_displaystring.txt"), s);               
 
                 OnProgressEvent(++progress, dirs.Length);
-                
             }
         }
     }

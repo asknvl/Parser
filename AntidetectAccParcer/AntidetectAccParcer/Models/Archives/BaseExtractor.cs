@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AntidetectAccParcer.Models.Archives
@@ -121,7 +122,11 @@ namespace AntidetectAccParcer.Models.Archives
                 int index = Math.Max(bmIndex, fpIndex);
 
                 geo_sc = (index > 0) ? splt[index + 1].ToUpper() : splt[9];
-                geo_sc = geo_sc.Substring(0, 2);
+                if (geo_sc.Length >= 2)
+                    geo_sc = geo_sc.Substring(0, 2);
+                else
+                    geo_sc = "?";
+                
 
                 return combineDescription();
 
@@ -178,7 +183,7 @@ namespace AntidetectAccParcer.Models.Archives
         #endregion
 
         #region public
-        public abstract void Extract(string source, string destination, string litera, ref int startnumber);
+        public abstract void Extract(string source, string destination, string litera, ref int startnumber, CancellationTokenSource cts);
         #endregion
 
         #region callbacks

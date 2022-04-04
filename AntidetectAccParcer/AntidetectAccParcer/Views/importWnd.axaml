@@ -40,8 +40,10 @@
 
 	<Grid Name="MainGrid" Background="White">
 		<Grid RowDefinitions="Auto, Auto, *, Auto">
-			<ProgressBar Grid.Row="0" Value="{Binding Progress}" Maximum="100" Margin="20, 10, 20, 0"/>
-			<Grid Grid.Row="1" VerticalAlignment="Center" Margin="10">
+			<Grid Name="StatusGrid" Grid.Row="0" Height="20" Background="Transparent">
+				<ProgressBar Value="{Binding Progress}" Maximum="100" Margin="20, 0, 20, 0"/>	
+			</Grid>			
+			<Grid Grid.Row="1" VerticalAlignment="Center" Margin="0" MinHeight="70">
 				<ListBox Name="TagsListBox" Items="{Binding Tags}" SelectedItems="{Binding SelectedTags}" VirtualizationMode="None" SelectionMode="Multiple, Toggle" VerticalAlignment="Center" HorizontalAlignment="Center">
 					<ListBox.ItemsPanel>
 						<ItemsPanelTemplate>
@@ -74,7 +76,7 @@
 					</ListBox.ItemTemplate>
 				</ListBox>
 			</Grid>
-			<Grid Grid.Row="2" ColumnDefinitions="*, *, *, *" Margin="10">
+			<Grid Grid.Row="2" ColumnDefinitions="*, *, *, *" Margin="10, 0, 10, 0">
 				<Grid Grid.Column="0" RowDefinitions="24, 40, *" Margin="10">
 					<TextBlock Grid.Row="0" VerticalAlignment="Center">
 						Прокси:
@@ -288,7 +290,7 @@
 									</TextBlock>
 									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
 										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Currency}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BaseCurrency}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BaseCurrency}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>									
 								</Grid>
 								<Grid Grid.Row="4" ColumnDefinitions="2*, 3*">
@@ -297,7 +299,7 @@
 									</TextBlock>
 									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
 										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Spent}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.SpentUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.SpentUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>
 								</Grid>								
 								<Grid Grid.Row="5" ColumnDefinitions="2*, 3*">
@@ -306,7 +308,7 @@
 									</TextBlock>
 									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
 										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Duty}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.DutyUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.DutyUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>
 								</Grid>
 								<Grid Grid.Row="6" ColumnDefinitions="2*, 3*">
@@ -315,7 +317,7 @@
 									</TextBlock>
 									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
 										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Limit}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.LimitUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>	
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.LimitUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>	
 									</Grid>									
 								</Grid>
 								<Grid Grid.Row="7" ColumnDefinitions="2*, 3*">
@@ -378,7 +380,7 @@
 						<ListBox Grid.Row="1" Items="{Binding SelectedAccount.Account.LoginsPasswords}" SelectedItem="{Binding SelectedPassword}" SelectionMode="Single" Margin="4, 2, 4, 0">
 							<ListBox.ItemTemplate>
 								<DataTemplate>									
-									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="Pointer" Height="24">
+									<Grid ColumnDefinitions="*, 24" ToolTip.Placement="Pointer" ToolTip.ShowDelay="0" Height="24">
 										<ToolTip.Tip>
 											<Border BorderBrush="LightGray" BorderThickness="1">
 												<ListBox Items="{Binding Logins}" Margin="4">

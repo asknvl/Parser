@@ -28,7 +28,7 @@ namespace YWB.AntidetectAccountParser.Services.Currency
                 double dvalue = double.Parse(svalue.Replace(",", "."), NumberFormatInfo.InvariantInfo);
                 double rate = allToUsdRate[currencyCode];
                 double dres = dvalue / rate;
-                res = string.Format("{0:0.00}", dres);
+                res = string.Format("{0:0}", dres);
 
             } catch
             {               

@@ -15,7 +15,7 @@ namespace AntidetectAccParcer.Models.Archives
         {
         }
 
-        public override void Extract(string source, string destination, string litera, ref int startnumber)
+        public override void Extract(string source, string destination, string litera, ref int startnumber, CancellationTokenSource cts)
         {
             var files = Directory.GetFiles(source, "*.zip");
 
@@ -27,19 +27,11 @@ namespace AntidetectAccParcer.Models.Archives
 
             foreach (var file in files)
             {
+
+                cts?.Token.ThrowIfCancellationRequested();
+
                 using (var archive = ZipFile.Open(file, ZipArchiveMode.Update))
                 {
-
-                    //var description = archive.Entries[0].FullName;
-
-                    //try
-                    //{
-                    //    description = description.Replace(@"\", "").Replace(@"/", "");
-                    //    int i = description.IndexOf("(");
-                    //    description = description.Remove(0, i).Replace("(", "").Replace(")", "");
-                    //} catch (Exception ex) {
-                    //    description = "Неверный формат";
-                    //} 
 
                     List<ZipArchiveEntry> entries = new List<ZipArchiveEntry>();
                     foreach (var entry in archive.Entries)
@@ -54,34 +46,21 @@ namespace AntidetectAccParcer.Models.Archives
                     for (int i = 0; i < entries.Count; i++)
                         entries[i].Delete();
 
-                    //var todel = archive.Entries.Where(o => o.FullName.ToLower().Contains("macos"));
-                    //||
-                    //                                  o.FullName.ToLower().Contains(".zip") ||
-                    //                                  o.FullName.ToLower().Contains(".rar"));
-
-
-                    //var splt = file.Split(Path.DirectorySeparatorChar);
-                    //string s = splt.FirstOrDefault(p => p.Contains(".zip"));
-                    //s = s.Replace(".zip", "");
-
                     string zippath = archive.Entries[0].FullName;
                     char[] sep = new char[] { '\\', '/', Path.DirectorySeparatorChar };
                     var sp = zippath.Split(sep);
                     zippath = sp[0];
-
-                    //var description = getDescription(s);
+                                        
                     var description = getDescription(zippath);
 
                     archive.ExtractToDirectory(destination, true);
 
-                    string name = $"{litera}{startnumber++}";
-                    //string name = $"{startnumber++}";
+                    string name = $"{litera}{startnumber++}";                    
                     string litpath = Path.Combine(destination, name);
 
                     if (Directory.Exists(litpath))
                         Directory.Delete(litpath, true);
-
-                    //Directory.Move(Path.Combine(destination, archive.Entries[0].FullName), litpath);
+                                        
                     Directory.Move(Path.Combine(destination, zippath), litpath);
                     
                     File.WriteAllText(Path.Combine(litpath, "_infostring.txt"), description);

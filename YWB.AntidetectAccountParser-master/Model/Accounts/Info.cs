@@ -240,6 +240,7 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Имя аккаунта:\t{fa.AccountName}");
             sb.AppendLine($"Имя:\t{Name}");
             sb.AppendLine($"ДР:\t{BirthDate}");
             if (!Currency.Equals("?"))

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AntidetectAccParcer.Models.Archives
@@ -16,7 +17,7 @@ namespace AntidetectAccParcer.Models.Archives
         {
         }
 
-        public override void Extract(string source, string destination, string litera, ref int startnumber)
+        public override void Extract(string source, string destination, string litera, ref int startnumber, CancellationTokenSource cts)
         {
             var files = Directory.GetFiles(source, "*.rar");
 
@@ -28,21 +29,12 @@ namespace AntidetectAccParcer.Models.Archives
 
             foreach (var file in files)
             {
+
+                cts?.Token.ThrowIfCancellationRequested();
+
                 using (var archive = RarArchive.Open(file))
-                {
-                    //string rarpath = file.Replace(@".rar", "");
-                    string fullPath = Path.GetFullPath(file).TrimEnd(Path.DirectorySeparatorChar);
-                    //string rarpath = fullPath.Split(Path.DirectorySeparatorChar).Last().Replace(".rar", "");
-
-
-                    //var description = rarpath.Replace(@"\", "").Replace(@"/", "");
-                    //int i = description.IndexOf("(");
-                    //description = description.Remove(0, i).Replace("(", "").Replace(")", "");
-
-                    //string[] descriptions = fullPath.Split('(', ')');
-                    //string description = descriptions[1];
-
-
+                {                    
+                    string fullPath = Path.GetFullPath(file).TrimEnd(Path.DirectorySeparatorChar);                    
                     string rarpath = string.Empty;
 
                     foreach (var entry in archive.Entries/*.Where(entry => !entry.IsDirectory)*/)
@@ -62,16 +54,6 @@ namespace AntidetectAccParcer.Models.Archives
                         });
                     }
 
-                    //string description = "";
-                    //try
-                    //{
-                    //    description = rarpath.Split('(', ')')[1];
-                    //    if (!checkDescription(description))
-                    //        throw new Exception();
-                    //} catch (Exception ex)
-                    //{
-                    //    description = "Неверный формат";
-                    //}
                     var description = getDescription(rarpath);
 
                     string name = $"{litera}{startnumber++}";                    

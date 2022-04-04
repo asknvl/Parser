@@ -54,7 +54,8 @@ namespace AntidetectAccParcer.Models.Proxies
                             break;
                     }
 
-                    proxy.Title = (prefix.Equals("")) ? proxy.Address : $"{prefix} {++ cntr}";
+                    proxy.Number = ++cntr;
+                    proxy.Title = (prefix.Equals("")) ? proxy.Address : $"{prefix} {proxy.Number}";
                     proxy.Type = protocol.ToString();
 
                     try
@@ -73,7 +74,7 @@ namespace AntidetectAccParcer.Models.Proxies
                 }
             }
 
-            return proxies;
+            return proxies.OrderBy(o => o.Number).ToList();
         }
     }
 }

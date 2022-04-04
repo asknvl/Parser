@@ -22,7 +22,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
         private List<string> _cpu = new List<string> { "2", "4", "6", "8", "16" };
         private List<string> _memory = new List<string> { "2", "4", "6", "8" };
 
-        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress)
+        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts)
         {
             var profiles = new List<(string, string)>();
             Console.WriteLine("Choose operating system:");

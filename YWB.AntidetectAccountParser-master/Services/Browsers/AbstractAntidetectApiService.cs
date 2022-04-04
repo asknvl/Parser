@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using YWB.AntidetectAccountParser.Helpers;
 using YWB.AntidetectAccountParser.Model.Accounts;
@@ -10,13 +11,13 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
     public abstract class AbstractAntidetectApiService
     {
         protected abstract string FileName { get; set; }
-        protected abstract Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress);
+        protected abstract Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts);
 
         protected abstract Task ImportCookiesAsync(string profileId, string cookies);
 
         protected abstract Task<bool> SaveItemToNoteAsync(string profileId, SocialAccount sa);
 
-        public async Task<Dictionary<string, SocialAccount>> ImportAccountsAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress)
+        public async Task<Dictionary<string, SocialAccount>> ImportAccountsAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts)
         {
             var res = new Dictionary<string, SocialAccount>();
             if (accounts.Count == 0)
@@ -30,10 +31,13 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
 
             AccountNamesHelper.Process(accounts);
 
-            var selectedProfiles = await CreateOrChooseProfilesAsync(accounts, os, tags, progress);
+            var selectedProfiles = await CreateOrChooseProfilesAsync(accounts, os, tags, progress, cts);
 
             for (int i = 0; i < accounts.Count; i++)
             {
+
+                cts?.Token.ThrowIfCancellationRequested();
+
                 string pId = selectedProfiles[i].pId;
                 string pName = selectedProfiles[i].pName;
 

@@ -100,13 +100,17 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
 
             request.AddParameter("application/json", p.ToString(), ParameterType.RequestBody);
             dynamic res = await ExecuteRequestAsync<dynamic>(request);
-            if (res.success != true) 
+            if (res.success != true)
+            {
+                if (res.msg.ToString().ToLower().Contains("maximum profiles"))
+                    throw new Exception("Максимальное число профилей в Octo");
                 throw new Exception(res.ToString());
+            }
             return res.data.uuid;
         }
 
 
-        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress)
+        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts)
         {
             var profiles = new List<(string, string)>();
             //Console.WriteLine("Choose operating system:");
@@ -119,7 +123,8 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
             var res = new List<(string, string)>();
             for (int i = 0; i < accounts.Count; i++)
             {
-                
+             
+                cts?.Token.ThrowIfCancellationRequested();
                 //Console.WriteLine($"Creating profile {accounts[i].AccountName}...");
                 var pId = await CreateNewProfileAsync(accounts[i].AccountName, os, accounts[i].Proxy, /*tag?.Name*/tags, accounts[i].UserAgent);
                 progress.Invoke(1, accounts.Count);

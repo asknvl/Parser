@@ -106,7 +106,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
             return await ExecuteRequestAsync<IndigoPlanSettings>(r);
         }
 
-        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress)
+        protected override async Task<List<(string pName, string pId)>> CreateOrChooseProfilesAsync(IList<SocialAccount> accounts, string os, string[] tags, Action<int, int> progress, CancellationTokenSource cts)
         {
             var groups = AllGroups.OrderBy(g => g.Key);
             Console.WriteLine("Choose group:");

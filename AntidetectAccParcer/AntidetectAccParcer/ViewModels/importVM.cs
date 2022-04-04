@@ -22,6 +22,7 @@ using TextCopy;
 using System.IO;
 using Newtonsoft.Json;
 using YWB.AntidetectAccountParser.Services.Currency;
+using Avalonia.Threading;
 
 namespace AntidetectAccParcer.ViewModels
 {
@@ -36,6 +37,7 @@ namespace AntidetectAccParcer.ViewModels
         IAccountsParser<FacebookAccount> parcer;
         List<AccountVM> memAccounts = new List<AccountVM>();
         initialVM init;
+        CancellationTokenSource cts;
         #endregion
 
         #region properties
@@ -98,11 +100,10 @@ namespace AntidetectAccParcer.ViewModels
             get => isAllProxyCheckedBrowser;
             set
             {
-                if (BrowserProxies != null && BrowserProxies.Count > 0)
+                if (BrowserProxies != null && BrowserProxies.Count > 0 && needNotifyCheck)
                 {
                     foreach (var proxy in BrowserProxies)
-                        if (needNotifyCheck)
-                            proxy.IsChecked = value;
+                        proxy.IsChecked = value;
                 }
                 this.RaiseAndSetIfChanged(ref isAllProxyCheckedBrowser, value);
                 
@@ -117,11 +118,10 @@ namespace AntidetectAccParcer.ViewModels
             get => isAllProxyCheckedMass;
             set
             {
-                if (MassImportProxies != null && MassImportProxies.Count > 0)
+                if (MassImportProxies != null && MassImportProxies.Count > 0 && needNotifyCheck)
                 {
                     foreach (var proxy in MassImportProxies)
-                        if (needNotifyCheck)
-                            proxy.IsChecked = value;
+                        proxy.IsChecked = value;
                 }                
                 this.RaiseAndSetIfChanged(ref isAllProxyCheckedMass, value);
                
@@ -141,7 +141,7 @@ namespace AntidetectAccParcer.ViewModels
             get => isAllAccountsChecked;
             set
             {
-                if (Accounts != null && Accounts.Count > 0)
+                if (Accounts != null && Accounts.Count > 0 && needNotifyCheck)
                 {
                     foreach (var item in Accounts)
                         item.IsChecked = value;
@@ -300,7 +300,7 @@ namespace AntidetectAccParcer.ViewModels
             {
                 massImportProxies = proxies;
                 var t = storage.load();
-                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent);
+                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent, false);
                 Proxies = MassImportProxies;
                 IsProxies = Proxies.Any(p => p.IsChecked);
             };
@@ -351,20 +351,26 @@ namespace AntidetectAccParcer.ViewModels
                         }
                     });
                     exportResultMsg(res);
-                } catch (Exception ex)
+                } catch (OperationCanceledException ex)
+                {
+                    infoMsg("Действие отменено");
+                } 
+                catch (Exception ex)
                 {
                     errMsg(ex.Message);
+                } finally
+                {
+                    Progress = 0;
                 }
             });
 
             copyData = ReactiveCommand.Create(() =>
             {
-
-                var acc = Accounts?.FirstOrDefault(a => a.IsChecked);
-                if (acc == null)
-                    return;
-                Clipboard clipboard = new();
-                clipboard.SetText(acc.Account.Info.ToString());
+                if (SelectedAccount != null)
+                {
+                    Clipboard clipboard = new();
+                    clipboard.SetText(SelectedAccount.Account.Info.ToString());
+                }
             });
             #endregion
 
@@ -400,6 +406,10 @@ namespace AntidetectAccParcer.ViewModels
         {
 
             AllowImport = false;
+            Accounts = new ObservableCollection<AccountVM>();
+            MemAccounts.Clear();
+            SelectedAccount = null;            
+            cts = new CancellationTokenSource();
 
             if (path != null)
             {
@@ -425,16 +435,14 @@ namespace AntidetectAccParcer.ViewModels
                             Progress = (int)(p * 100 / t);
                         };
                         int num = Parameters.StartNumber;
-                        extractor.Extract(path, path, Parameters.Litera, ref num);
+                        extractor.Extract(path, path, Parameters.Litera, ref num, cts);
 
-                        accs = parcer.Parse(path).ToList();
+                        accs = parcer.Parse(path, cts).ToList();
                         List<string> toDeleteList = new List<string>();
 
                         for (int i = 0; i < accs.Count; i++)
                         {
-
                             Progress = (int)(i * 100 / accs.Count);
-
                             if (accs[i].WasParced)
                             {
                                 DirectoryInfo dp = Directory.GetParent(accs[i].Path);
@@ -445,7 +453,6 @@ namespace AntidetectAccParcer.ViewModels
                                 accs[i].Path = newpath;
                                 continue;
                             }
-
                             if (!accs[i].Path.Contains(accs[i].AccountName))
                             {
                                 DirectoryInfo dp = Directory.GetParent(accs[i].Path);
@@ -490,8 +497,8 @@ namespace AntidetectAccParcer.ViewModels
 
                     });
 
-                    Accounts = new ObservableCollection<AccountVM>();
-                    MemAccounts.Clear();
+                    //Accounts = new ObservableCollection<AccountVM>();
+                    //MemAccounts.Clear();
 
                     foreach (var acc in accs)
                     {
@@ -508,23 +515,36 @@ namespace AntidetectAccParcer.ViewModels
 
                     Progress = 0;
 
-                } catch (Exception ex)
+                } catch (OperationCanceledException ex)
+                {
+                    infoMsg("Действие отменено");                    
+                }
+                
+                catch (Exception ex)
                 {
                     errMsg(ex.Message);
-                }
+                } finally
+                {
+                    Progress = 0;
+                    AllowImport = true;
+                } 
 
             } else
                 errMsg("Не выбрана директория с аккаунтами");
-
-            AllowImport = true;
+            
         }
         void errMsg(string msg)
-        {
-            ws.ShowDialog(new errMsgVM(msg), this);
+        {            
+            Dispatcher.UIThread.InvokeAsync(() => {
+                ws.ShowDialog(new errMsgVM(msg), this);                
+            });
+            Progress = 0;
         }
         void infoMsg(string msg)
         {
-            ws.ShowDialog(new infoMsgVM(msg), this);
+            Dispatcher.UIThread.InvokeAsync(() => {
+                ws.ShowDialog(new infoMsgVM(msg), this);
+            });            
         }
         void exportResultMsg(int res)
         {
@@ -548,6 +568,8 @@ namespace AntidetectAccParcer.ViewModels
         }
         async Task<int> exportToOcto()
         {
+            
+
             var proxies = Proxies.Where(p => p.IsChecked).ToList();
             if (proxies.Count == 0)
                 throw new Exception("Не выбран ни один прокси");
@@ -562,21 +584,25 @@ namespace AntidetectAccParcer.ViewModels
                     i++;
                 }
             }
-
+                        
             var accounts = Accounts.Where(p => p.IsChecked).Select(a => (SocialAccount)a.Account).ToList();
             int itteration = 0;
 
-            var profiles = await browser.ImportAccountsAsync(accounts, parameters.OS.ToString(), SelectedTags.ToArray(), (p, t) => { Progress = (int)(itteration++ * 100 / (t * 2)); });
+            cts = new CancellationTokenSource();
+            var profiles = await browser.ImportAccountsAsync(accounts, parameters.OS.ToString(), SelectedTags.ToArray(), (p, t) => { Progress = (int)(itteration++ * 100 / (t * 2)); }, cts);
 
             Progress = 100;
 
             return profiles.Count;
         }
-
+        void stop()
+        {
+            cts?.Cancel();
+        }
         async Task<ObservableCollection<ProxyParameters>> getProxies(List<Proxy> loaded, 
                                                                      ObservableCollection<ProxyParameters> stored,
                                                                      bool allChecked,
-                                                                     Action<ProxyParameters> onChecked)
+                                                                     Action<ProxyParameters> onChecked, bool sort)
         {
             List<ProxyParameters> res = new List<ProxyParameters>();
             IProxyChecker checker = new ipwhoisProxyChecker();
@@ -584,6 +610,9 @@ namespace AntidetectAccParcer.ViewModels
             List<Proxy>? tmp = (loaded != null) ? loaded : stored?.Select(o => o.Proxy).ToList();
             if (tmp == null)
                 return new ObservableCollection<ProxyParameters>(res);
+
+            Progress = 0;
+            int cntr = 0;
 
             foreach (var proxy in tmp)
             {
@@ -602,10 +631,14 @@ namespace AntidetectAccParcer.ViewModels
                     p.IsChecked = allChecked | storedChecked;                    
                     
                     res.Add(p);
+                    Progress = (int)(++cntr * 100 / tmp.Count);
                 }
             }
 
-            res = res.OrderBy(o => o.Proxy.Title).ToList();
+            Progress = 0;
+            if (sort)
+                res = res.OrderBy(o => o.Proxy.Title).ToList();           
+
             return new ObservableCollection<ProxyParameters>(res);
         }
         #endregion
@@ -626,8 +659,7 @@ namespace AntidetectAccParcer.ViewModels
             IsAllProxyCheckedBrowserStore = IsAllProxyCheckedBrowser;
             IsAllProxyCheckedMassStore = IsAllProxyCheckedMass;
             storage.save(this);
-        }
-       
+        }       
 
         public async void onStart()
         {
@@ -670,8 +702,8 @@ namespace AntidetectAccParcer.ViewModels
                 errMsg("Не удалось загрузить теги из браузера");
             }
 
-            BrowserProxies = await getProxies(browserProxies, t.BrowserProxies, IsAllProxyCheckedBrowser, BrowserProxyCheckedEvent);
-            MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent);
+            BrowserProxies = await getProxies(browserProxies, t.BrowserProxies, IsAllProxyCheckedBrowser, BrowserProxyCheckedEvent, true);
+            MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent, false);
             BrowserProxyCheckedEvent(null);
             MassProxyCheckedEvent(null);
 
@@ -734,8 +766,27 @@ namespace AntidetectAccParcer.ViewModels
         }
         private void A_OnAccountChecked(AccountVM obj)
         {
-            var chkd = Accounts?.Where(p => p.IsChecked == true).ToList();
-            IsAccounts = (chkd != null & chkd.Count > 0);
+            //var chkd = Accounts?.Where(p => p.IsChecked == true).ToList();
+            //IsAccounts = (chkd != null & chkd.Count > 0);
+            if (Accounts != null)
+            {
+                IsAccounts = Accounts.Any(p => p.IsChecked);
+                int cnt = Accounts.Count(p => p.IsChecked);
+
+                if (IsAllAccountsChecked && cnt < Accounts.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllAccountsChecked = false;
+                    needNotifyCheck = true;
+                }
+                if (!IsAllAccountsChecked && cnt == Accounts.Count)
+                {
+                    needNotifyCheck = false;
+                    IsAllAccountsChecked = true;
+                    needNotifyCheck = true;
+                }
+            }
+
         }
         public async void OnDropEvent(List<string> filenames)
         {
@@ -760,6 +811,7 @@ namespace AntidetectAccParcer.ViewModels
 
                     string parsed = $"{input}_parsed";
                     tmp = parsed;
+                    //tmp = Path.Combine($"{input}", "ParsedAccounts");
                     if (Directory.Exists(tmp))
                         Directory.Delete(tmp, true);
                     Directory.CreateDirectory(tmp);
@@ -790,6 +842,9 @@ namespace AntidetectAccParcer.ViewModels
             }
 
 
+        }
+        public void OnStopRequest() {
+            stop();
         }
         #endregion
     }

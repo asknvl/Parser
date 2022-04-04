@@ -17,7 +17,7 @@ namespace AntidetectAccParcer.Models.Archives
         string[] extensions = new string[] { "rar", "zip" };
         #endregion
 
-        public override void Extract(string source, string destination, string litera, ref int startnumber)
+        public override void Extract(string source, string destination, string litera, ref int startnumber, CancellationTokenSource cts)
         {
 
 
@@ -28,7 +28,7 @@ namespace AntidetectAccParcer.Models.Archives
                 {
                     OnProgressEvent(p, t);
                 };
-                dir.Extract(source, source, litera, ref startnumber);
+                dir.Extract(source, source, litera, ref startnumber, cts);
 
             } catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace AntidetectAccParcer.Models.Archives
                 zip.ProgressEvent += (p, t) => {
                     OnProgressEvent(p, t);
                 };
-                zip.Extract(source, source, litera, ref startnumber);
+                zip.Extract(source, source, litera, ref startnumber, cts);
             } catch (Exception ex)
             {
             }
@@ -52,7 +52,7 @@ namespace AntidetectAccParcer.Models.Archives
                 rar.ProgressEvent += (p, t) => {
                     OnProgressEvent(p, t);
                 };
-                rar.Extract(source, source, litera, ref startnumber);
+                rar.Extract(source, source, litera, ref startnumber, cts);
             } catch (Exception ex)
             {
 

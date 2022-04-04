@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using YWB.AntidetectAccountParser.Model.Accounts;
 
 namespace YWB.AntidetectAccountParser.Services.Parsers
@@ -36,7 +37,7 @@ namespace YWB.AntidetectAccountParser.Services.Parsers
             return input;
         }
 
-        public IEnumerable<T> Parse(string path)
+        public IEnumerable<T> Parse(string path, CancellationTokenSource cts)
         {
             var input = Preprocess();
             return Process(input);

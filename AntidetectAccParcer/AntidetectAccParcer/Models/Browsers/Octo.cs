@@ -52,7 +52,5 @@ namespace AntidetectAccParcer.Models.Browsers {
             return res;
         }
 
-        
-
     }
 }
