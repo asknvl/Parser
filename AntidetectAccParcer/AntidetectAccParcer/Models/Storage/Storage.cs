@@ -17,7 +17,7 @@ namespace AntidetectAccParcer.Models.Storage {
         #endregion
 
         public Storage(string path, T t) {
-            this.path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), path);
+            this.path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), path);
             this.t = t;
         }
 

@@ -221,7 +221,7 @@ namespace AntidetectAccParcer.ViewModels
                 {
 
                     if (!value.Equals(""))
-                        LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.Contains(value)));
+                        LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.ToLower().Contains(value.ToLower())));
                     else
                         LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords);
                 }
@@ -240,7 +240,7 @@ namespace AntidetectAccParcer.ViewModels
             {
 
                 if (!value.Equals(""))
-                    Accounts = new ObservableCollection<AccountVM>(MemAccounts.Where(p => p.Account.AccountName.Contains(value)));
+                    Accounts = new ObservableCollection<AccountVM>(MemAccounts.Where(p => p.Account.AccountName.ToLower().Contains(value.ToLower())));
                 else
                     Accounts = MemAccounts;
 
@@ -695,6 +695,42 @@ namespace AntidetectAccParcer.ViewModels
             IsAllProxyCheckedMassStore = IsAllProxyCheckedMass;
             storage.save(this);
         }       
+
+        public async Task OnStart()
+        {
+            try
+            {
+                var t = storage.load();
+                Parameters = t.parameters;
+
+                openexchangerates_org.getInstance().Init();
+
+                browserProxies = await browserData.getProxiesAsync();
+
+                Tags = await browserData.getTags("Без тегов");
+
+                SelectedTags.Clear();
+
+                foreach (var item in t.SelectedTags)
+                {
+                    if (Tags.Contains(item))
+                        SelectedTags.Add(item);
+                }
+
+                BrowserProxies = await getProxies(browserProxies, t.BrowserProxies, IsAllProxyCheckedBrowser, BrowserProxyCheckedEvent, true);
+                MassImportProxies = await getProxies(massImportProxies, t.MassImportProxies, IsAllProxyCheckedMass, MassProxyCheckedEvent, false);
+                BrowserProxyCheckedEvent(null);
+                MassProxyCheckedEvent(null);
+
+                loadBrowserProxies.Execute();
+
+                AllowProxyChange = true;
+
+            } catch (Exception ex)
+            {
+
+            } 
+        }
 
         public async void onStart()
         {

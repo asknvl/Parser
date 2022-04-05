@@ -138,7 +138,9 @@ namespace AntidetectAccParcer.Views
             base.OnOpened(e);
             try
             {
-                ((ILifeCicle)DataContext).onStart();
+                //((ILifeCicle)DataContext).onStart();
+
+                ((importVM)DataContext).OnStart();
             }
             catch { };
         }

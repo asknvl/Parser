@@ -171,7 +171,7 @@
 						</Grid>
 					</Border>
 				</Grid>
-				<Grid Grid.Column="1" RowDefinitions="24, 40, Auto, *" Margin="10">
+				<Grid Grid.Column="1" RowDefinitions="24, 40, 38, *" Margin="10">
 					<TextBlock Grid.Row="0" VerticalAlignment="Center">
 						Аккаунты:
 					</TextBlock>
@@ -291,9 +291,9 @@
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										Валюта:
 									</TextBlock>
-									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
-										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Currency}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BaseCurrency}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">										
+										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.BaseCurrency}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Currency}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>									
 								</Grid>
 								<Grid Grid.Row="4" ColumnDefinitions="2*, 3*">
@@ -301,26 +301,26 @@
 										Спенд:
 									</TextBlock>
 									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
-										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Spent}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.SpentUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.SpentUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Spent}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>
 								</Grid>								
 								<Grid Grid.Row="5" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										Долг:
 									</TextBlock>
-									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
-										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Duty}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.DutyUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">										
+										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.DutyUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Duty}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>
 								</Grid>
 								<Grid Grid.Row="6" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										Лимит:
 									</TextBlock>
-									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">
-										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.Limit}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.LimitUSD}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>	
+									<Grid Grid.Column="1" ColumnDefinitions="1*, 1*">										
+										<TextBox Grid.Column="0" Text="{Binding SelectedAccount.Account.Info.LimitUSD}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Limit}" FontSize="14" Foreground="Gray" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 									</Grid>									
 								</Grid>
 								<Grid Grid.Row="7" ColumnDefinitions="2*, 3*">
@@ -375,7 +375,7 @@
 						</ScrollViewer>
 					</Border>
 				</Grid>
-				<Grid Grid.Column="3" RowDefinitions="24, Auto, *" Margin="10">
+				<Grid Grid.Column="3" RowDefinitions="24, 39, *" Margin="10">
 					<TextBlock Grid.Row="0" VerticalAlignment="Center">						
 						Пароли:
 					</TextBlock>
