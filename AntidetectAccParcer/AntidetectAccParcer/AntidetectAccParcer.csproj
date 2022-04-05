@@ -23,6 +23,10 @@
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaXaml Remove="Models\Currencies\**" />
+    <Compile Remove="Models\Currencies\**" />
+    <EmbeddedResource Remove="Models\Currencies\**" />
+    <None Remove="Models\Currencies\**" />
     <Compile Remove="Models\Proxies\Class1.cs" />
     <None Remove=".gitignore" />
     <None Remove="Assets\AB.png" />
@@ -237,8 +241,5 @@
     <Compile Update="Views\ProcessProxyWnd.axaml.cs">
       <DependentUpon>ProcessProxyWnd.axaml</DependentUpon>
     </Compile>	  
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Currencies\" />
   </ItemGroup>
 </Project>

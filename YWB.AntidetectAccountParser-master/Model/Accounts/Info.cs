@@ -244,13 +244,13 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             sb.AppendLine($"Имя:\t{Name}");
             sb.AppendLine($"ДР:\t{BirthDate}");
             if (!Currency.Equals("?"))
-                sb.AppendLine($"Валюта:\t{Currency}\tUSD");
+                sb.AppendLine($"Валюта:\tUSD\t{Currency}");
             if (!Spent.Equals("?"))
-                sb.AppendLine($"Спенд:\t{Spent}\t{SpentUSD}");            
+                sb.AppendLine($"Спенд:\t{SpentUSD}\t{Spent}");            
             if (!Duty.Equals("?"))
-                sb.AppendLine($"Долг:\t{Duty}\t{DutyUSD}");
+                sb.AppendLine($"Долг:\t{DutyUSD}\t{Duty}");
             if (!Limit.Equals("?"))
-                sb.AppendLine($"Лимит:\t{Limit}\t{LimitUSD}");
+                sb.AppendLine($"Лимит:\t{LimitUSD}\t{Limit}");
             if (!Prepay.Equals("?"))
                 sb.AppendLine($"Предоплата:\t{Prepay}");
             if (!Status.Equals("?"))
