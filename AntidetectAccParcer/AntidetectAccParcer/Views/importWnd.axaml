@@ -11,6 +11,7 @@
         x:Class="AntidetectAccParcer.Views.importWnd"		
         Title="XTime Parser v1.0" 
 		Width="1280" Height="720"
+		Icon="/Assets/icon_128.png"
 		WindowStartupLocation="CenterScreen">
 
 	<Window.Styles>
