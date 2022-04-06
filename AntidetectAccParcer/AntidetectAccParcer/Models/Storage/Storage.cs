@@ -17,7 +17,12 @@ namespace AntidetectAccParcer.Models.Storage {
         #endregion
 
         public Storage(string path, T t) {
-            this.path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData, Environment.SpecialFolderOption.Create), path);
+            string user_path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            string app_path = Path.Combine(user_path, $"Library", $"Application Support", $"XTime");
+            if (!Directory.Exists(app_path))
+                Directory.CreateDirectory(app_path);
+            this.path = Path.Combine(app_path, path);
+            //this.path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal, Environment.SpecialFolderOption.Create), path);
             this.t = t;
         }
 
