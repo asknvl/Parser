@@ -23,6 +23,9 @@ using System.IO;
 using Newtonsoft.Json;
 using YWB.AntidetectAccountParser.Services.Currency;
 using Avalonia.Threading;
+using Avalonia.Media.Imaging;
+using Avalonia;
+using Avalonia.Platform;
 
 namespace AntidetectAccParcer.ViewModels
 {
@@ -91,9 +94,62 @@ namespace AntidetectAccParcer.ViewModels
                 {
                     LoginsPasswords = new ObservableCollection<LoginPassword>(selectedAccount.Account.LoginsPasswords);
                     SearchPassword = "";
-                }
+
+                    SC = selectedAccount.Account.Info.GEO_SC;
+                    RK = selectedAccount.Account.Info.GEO_RK;
+                } 
             }
         }
+
+        string sc;
+        public string SC
+        {
+            get => sc;
+            set {
+
+                if (SelectedAccount != null)
+                {
+                    SelectedAccount.Account.Info.GEO_SC = value;
+                    this.RaiseAndSetIfChanged(ref sc, value);
+                    var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+                    try
+                    {
+                        SCFlag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/{sc}.png")));
+                    } catch
+                    {
+                        SCFlag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/empty.png")));
+                    };
+                }
+
+            }
+        }
+
+        string rk;
+        public string RK
+        {
+            get => rk;
+            set
+            {
+                if (SelectedAccount != null)
+                {
+                    value = value.ToUpper();
+
+                    SelectedAccount.Account.Info.GEO_RK = value;
+                    this.RaiseAndSetIfChanged(ref rk, value);
+                    var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+
+                    try
+                    {
+                        RKFlag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/{rk}.png")));
+                    } catch
+                    {
+                        RKFlag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/empty.png")));
+                    };
+                }
+
+            }
+        }
+
         [JsonProperty]
         public bool IsAllProxyCheckedBrowserStore { get; set; }
 
@@ -216,19 +272,19 @@ namespace AntidetectAccParcer.ViewModels
             get => searchPassword;
             set
             {
-
                 if (LoginsPasswords != null)
                 {
-
                     if (!value.Equals(""))
+                    {
                         LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Password.ToLower().Contains(value.ToLower())));
-                    else
+                        if (LoginsPasswords.Count == 0)
+                        {
+                            LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords.Where(p => p.Logins.Any(o => o.ToLower().Contains(value.ToLower()))));
+                        }
+                    } else
                         LoginsPasswords = new ObservableCollection<LoginPassword>(SelectedAccount.Account.LoginsPasswords);
                 }
-
-                this.RaiseAndSetIfChanged(ref searchPassword, value);
-                //else
-                //    Accounts = memAccounts;
+                this.RaiseAndSetIfChanged(ref searchPassword, value);                
             }
         }
 
@@ -238,15 +294,12 @@ namespace AntidetectAccParcer.ViewModels
             get => searchName;
             set
             {
-
                 if (!value.Equals(""))
                     Accounts = new ObservableCollection<AccountVM>(MemAccounts.Where(p => p.Account.AccountName.ToLower().Contains(value.ToLower())));
                 else
                     Accounts = MemAccounts;
 
-                this.RaiseAndSetIfChanged(ref searchName, value);
-                //else
-                //    Accounts = memAccounts;
+                this.RaiseAndSetIfChanged(ref searchName, value);                
             }
         }
 
@@ -283,6 +336,20 @@ namespace AntidetectAccParcer.ViewModels
         {
             get => fileImport;
             set => this.RaiseAndSetIfChanged(ref fileImport, value);
+        }
+
+        Bitmap scflag;
+        public Bitmap SCFlag
+        {
+            get => scflag;
+            set => this.RaiseAndSetIfChanged(ref scflag, value);    
+        }
+
+        Bitmap rkflag;
+        public Bitmap RKFlag
+        {
+            get => rkflag;
+            set => this.RaiseAndSetIfChanged(ref rkflag, value);
         }
         #endregion
 
@@ -353,10 +420,7 @@ namespace AntidetectAccParcer.ViewModels
             });
 
             loadAccounts = ReactiveCommand.CreateFromTask(async () =>
-            {
-                //IsAccounts = false;
-                //string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
-                //await importAccounts(path);
+            {              
 
                 IsAccounts = false;
                 string path = await ws.ShowFileDialog("Выберите директорию с аккаунтами", this);
@@ -408,7 +472,6 @@ namespace AntidetectAccParcer.ViewModels
                 }
             });
             #endregion
-
         }
 
         #region helpers    
@@ -439,10 +502,12 @@ namespace AntidetectAccParcer.ViewModels
         }
         async Task importAccounts(string path)
         {
+            SC = "";
+            RK = "";
 
             AllowImport = false;
             Accounts = new ObservableCollection<AccountVM>();
-            MemAccounts.Clear();
+            MemAccounts.Clear();            
             SelectedAccount = null;            
             cts = new CancellationTokenSource();
 

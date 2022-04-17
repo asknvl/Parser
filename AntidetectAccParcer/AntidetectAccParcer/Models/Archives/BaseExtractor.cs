@@ -17,6 +17,7 @@ namespace AntidetectAccParcer.Models.Archives
         string limit;
         string prepay;
         string status;
+        string billing;
         string cards;
         string geo_rk;
         string bm;
@@ -33,6 +34,7 @@ namespace AntidetectAccParcer.Models.Archives
             limit = "?";
             prepay = "?";
             status = "?";
+            billing = "?";            
             cards = "?";
             geo_rk = "?";
             bm = "?";
@@ -48,6 +50,7 @@ namespace AntidetectAccParcer.Models.Archives
                    $"{limit}_" +
                    $"{prepay}_" +
                    $"{status}_" +
+                   $"{billing}_" +
                    $"{cards}_" +
                    $"{geo_rk}_" +
                    $"{bm}_" +
@@ -86,11 +89,13 @@ namespace AntidetectAccParcer.Models.Archives
                 spent = splt[0];
                 currency = splt[1];
                 duty = splt[2];
-                limit = splt[3];
+                limit = splt[3].ToLower().Equals("-1") ? "UNLIM" : splt[3];
                 prepay = splt[4].ToLower().Equals("true") ? "Да" : "Нет";
                 status = splt[5].ToLower().Equals("active") ? "Активен" : "Неактивен";
-                string c = $"{splt[6]}, {splt[7]}";
-                cards = c;
+                //string c = $"{splt[6]}, {splt[7]}";
+                billing = splt[6].ToLower().Equals("x") ? "Нет" : splt[6];
+                cards = splt[7].ToLower().Equals("x") ? "Нет" : splt[7];
+                
                 geo_rk = splt[8].ToUpper();
                 
                 var sbm = splt.FirstOrDefault(o => o.ToLower().Contains("bm"));

@@ -8,6 +8,7 @@
 		xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 		xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 		xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+		xmlns:cust="using:AntidetectAccParcer.Views.custom"
         x:Class="AntidetectAccParcer.Views.importWnd"		
         Title="XTime Parser v1.0" 
 		Width="1280" Height="720"
@@ -149,8 +150,8 @@
 											<CheckBox Grid.Column="0" IsChecked="{Binding IsChecked}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center">
 												<Grid VerticalAlignment="Center">
 													<TextBlock Text="{Binding Proxy.Title}" FontWeight="Bold" VerticalAlignment="Center" Margin="0, 2, 0, 0"/>
-													<Image Source="{Binding Flag}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 60, 0"/>
-													<TextBlock Grid.Column="2" Text="{Binding Country}" VerticalAlignment="Center" Margin="0, 0, 30, 0" HorizontalAlignment="Right"/>
+													<Image Source="{Binding Flag}" Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 0, 30, 0"/>
+													<TextBlock Grid.Column="2" Text="{Binding Country}" VerticalAlignment="Center" Margin="0, 0, 60, 0" HorizontalAlignment="Right"/>
 												</Grid>
 											</CheckBox>
 										</Grid>
@@ -265,7 +266,7 @@
 									<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
 								</Style>
 							</ScrollViewer.Styles>
-							<Grid RowDefinitions="20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, Auto, Auto, Auto">
+							<Grid RowDefinitions="20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, Auto, Auto, Auto">
 								<Grid Grid.Row="0" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										Имя аккаунта:
@@ -337,39 +338,52 @@
 								</Grid>
 								<Grid Grid.Row="9" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										Биллинг:
+									</TextBlock>
+									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Billing}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+								</Grid>
+								<Grid Grid.Row="10" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										Карты:
 									</TextBlock>
 									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.Cards}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 								</Grid>
-								<Grid Grid.Row="10" ColumnDefinitions="2*, 3*">
-									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
-										ГЕО РК:
-									</TextBlock>
-									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.GEO_RK}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
-								</Grid>
 								<Grid Grid.Row="11" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
-										ГЕО СЦ:
-									</TextBlock>
-									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.GEO_SC}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
+										ГЕО РК:
+									</TextBlock>									
+									<Grid ColumnDefinitions="20
+										  , 30" Grid.Column="1">										
+										<cust:LiteraTextBox Grid.Column="0" Text="{Binding RK}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll" MaxLength="2"/>
+										<Image Grid.Column="1" Source="{Binding RKFlag}" Margin="2"/>
+									</Grid>
 								</Grid>
 								<Grid Grid.Row="12" ColumnDefinitions="2*, 3*">
+									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
+										ГЕО СЦ:
+									</TextBlock>									
+									<Grid ColumnDefinitions="20, 30" Grid.Column="1">										
+										<cust:LiteraTextBox Grid.Column="0" Text="{Binding SC}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll" MaxLength="2"/>
+										<Image Grid.Column="1" Source="{Binding SCFlag}" Margin="2"/>
+									</Grid>
+								</Grid>
+								<Grid Grid.Row="13" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										БМ:
 									</TextBlock>
 									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.BM}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 								</Grid>
-								<Grid Grid.Row="13" ColumnDefinitions="2*, 3*">
+								<Grid Grid.Row="14" ColumnDefinitions="2*, 3*">
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										ФП:
 									</TextBlock>
 									<TextBox Grid.Column="1" Text="{Binding SelectedAccount.Account.Info.FP}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll"/>
 								</Grid>
-								<TextBox Grid.Row="14" Text="{Binding SelectedAccount.Account.DisplayInfoString}" VerticalAlignment="Center" Classes="TextBox NoBorder"  FontSize="12" TextWrapping="Wrap" Foreground="Gray" Margin="-3, 0, 0, 0"/>
+								<TextBox Grid.Row="15" Text="{Binding SelectedAccount.Account.DisplayInfoString}" VerticalAlignment="Center" Classes="TextBox NoBorder"  FontSize="12" TextWrapping="Wrap" Foreground="Gray" Margin="-3, 0, 0, 0"/>
 
-								<TextBox Grid.Row="15" Text="{Binding SelectedAccount.Account.Info.UserAgent}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
+								<TextBox Grid.Row="16" Text="{Binding SelectedAccount.Account.Info.UserAgent}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
 
-								<TextBox Grid.Row="16" Text="{Binding SelectedAccount.Account.Info.Token}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
+								<TextBox Grid.Row="17" Text="{Binding SelectedAccount.Account.Info.Token}" VerticalAlignment="Center" Classes="TextBox NoBorder" FontSize="12" TextWrapping="Wrap" Foreground="Gray"  Margin="-3, 0, 0, 0"/>
 
 							</Grid>
 						</ScrollViewer>

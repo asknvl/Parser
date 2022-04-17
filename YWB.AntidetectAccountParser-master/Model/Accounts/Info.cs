@@ -67,7 +67,10 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             set
             {
                 limit = value;
-                LimitUSD = converter.Convert(limit, Currency);
+                if (limit.ToLower().Equals("unlim"))
+                    LimitUSD = "UNLIM";
+                else
+                    LimitUSD = converter.Convert(limit, Currency);
             }
         }
         [JsonProperty]
@@ -77,16 +80,18 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
         [JsonProperty]
         public string Status { get; set; }
         [JsonProperty]
-        public string Cards { get; set; }
+        public string Billing { get; set; }
         [JsonProperty]
-        public string GEO_RK { get; set; }
+        public string Cards { get; set; }        
+        [JsonProperty]
+        public string GEO_RK { get; set; }        
         [JsonProperty]
         public string BM { get; set; }
         [JsonProperty]
-        public string FP { get; set; }
+        public string FP { get; set; }        
         [JsonProperty]
-        public string GEO_SC { get; set; }       
-        
+        public string GEO_SC { get; set; }
+
         string useragent;
         [JsonProperty]        
         public string UserAgent
@@ -137,11 +142,12 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                 Limit = splt[3];
                 Prepay = splt[4];
                 Status = splt[5];
-                Cards = splt[6];
-                GEO_RK = splt[7];
-                BM = splt[8];
-                FP = splt[9];
-                GEO_SC = splt[10];               
+                Billing = splt[6];
+                Cards = splt[7];
+                GEO_RK = splt[8];
+                BM = splt[9];
+                FP = splt[10];
+                GEO_SC = splt[11];               
 
             } catch (Exception ex)
             {
@@ -151,6 +157,7 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                 Limit = "?";
                 Prepay = "?"; 
                 Status = "?";
+                Billing = "?";
                 Cards = "?";
                 GEO_RK = "?";
                 BM = "?";
@@ -178,6 +185,7 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                     Limit = "?";
                     Prepay = "?";
                     Status = "?";
+                    Billing = "?";
                     Cards = "?";
                     GEO_RK = "?";
                     BM = "?";
@@ -202,6 +210,7 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
             Limit = p.Limit;
             Prepay= p.Prepay;
             Status = p.Status;
+            Billing = p.Billing;
             Cards = p.Cards;
             GEO_RK = p.GEO_RK;
             BM = p.BM;
@@ -255,6 +264,8 @@ namespace YWB.AntidetectAccountParser.Model.Accounts
                 sb.AppendLine($"Предоплата:\t{Prepay}");
             if (!Status.Equals("?"))
                 sb.AppendLine($"Статус:\t{Status}");
+            if (!Billing.Equals("?"))
+                sb.AppendLine($"Биллинг:\t{Billing}");
             if (!Cards.Equals("?"))
                 sb.AppendLine($"Карты:\t{Cards}");
             if (!GEO_RK.Equals("?"))
