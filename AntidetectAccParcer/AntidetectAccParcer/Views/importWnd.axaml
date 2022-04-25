@@ -352,8 +352,7 @@
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										ГЕО РК:
 									</TextBlock>									
-									<Grid ColumnDefinitions="20
-										  , 30" Grid.Column="1">										
+									<Grid ColumnDefinitions="25, 30" Grid.Column="1">										
 										<cust:LiteraTextBox Grid.Column="0" Text="{Binding RK}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll" MaxLength="2"/>
 										<Image Grid.Column="1" Source="{Binding RKFlag}" Margin="2"/>
 									</Grid>
@@ -362,7 +361,7 @@
 									<TextBlock Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">
 										ГЕО СЦ:
 									</TextBlock>									
-									<Grid ColumnDefinitions="20, 30" Grid.Column="1">										
+									<Grid ColumnDefinitions="25, 30" Grid.Column="1">										
 										<cust:LiteraTextBox Grid.Column="0" Text="{Binding SC}" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Classes="TextBox NoBorderAndScroll" MaxLength="2"/>
 										<Image Grid.Column="1" Source="{Binding SCFlag}" Margin="2"/>
 									</Grid>

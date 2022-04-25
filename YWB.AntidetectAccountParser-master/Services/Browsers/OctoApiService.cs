@@ -76,7 +76,10 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
                 os = "mac";
 
             p.fingerprint.os = os;
-            p.fingerprint.user_agent = user_agent;
+
+            if (!user_agent.Contains("YaBrowser"))
+                p.fingerprint.user_agent = user_agent;
+
             p.fingerprint.screen = Encoding.UTF8.GetString(Encoding.Default.GetBytes("1920x1080"));
             p.proxy = new JObject();
             
