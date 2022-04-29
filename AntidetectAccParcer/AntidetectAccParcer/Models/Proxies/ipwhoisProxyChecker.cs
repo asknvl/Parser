@@ -4,6 +4,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,11 @@ namespace AntidetectAccParcer.Models.Proxies
     {
         public async Task<JObject> Check(string address)
         {
-            var rc = new RestClient("http://ipwhois.app/json/");
-            var r = new RestRequest(address, Method.GET);
-            var resp = await rc.ExecuteAsync(r);            
-            var res = JsonConvert.DeserializeObject<JObject>(resp.Content);            
+            var ip = Dns.GetHostAddresses(address);
+            var rc = new RestClient("http://ipwho.is/");
+            var r = new RestRequest(ip[0].ToString(), Method.GET);
+            var resp = await rc.ExecuteAsync(r);
+            var res = JsonConvert.DeserializeObject<JObject>(resp.Content);
             return res;
         }
     }

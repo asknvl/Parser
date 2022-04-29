@@ -793,7 +793,8 @@ namespace AntidetectAccParcer.ViewModels
 
             } catch (Exception ex)
             {
-
+                errMsg(ex.Message);
+                AllowProxyChange = true;
             } 
         }
 

@@ -11,8 +11,8 @@
     <CFBundleName>AntidetectAccParcer</CFBundleName> <!-- Also defines .app file name -->
     <CFBundleDisplayName>XTime Parser</CFBundleDisplayName>
     <CFBundleIdentifier>com.xtimeparcer</CFBundleIdentifier>
-    <CFBundleShortVersionString>1.0</CFBundleShortVersionString>
-    <CFBundleVersion>1.0.0</CFBundleVersion>
+    <CFBundleShortVersionString>1.1</CFBundleShortVersionString>
+    <CFBundleVersion>1.1.0</CFBundleVersion>
     <CFBundlePackageType>APPL</CFBundlePackageType>
     <CFBundleSignature>????</CFBundleSignature>
     <CFBundleExecutable>AntidetectAccParcer</CFBundleExecutable>
@@ -231,7 +231,7 @@
       <HintPath>libs\Material.Styles.dll</HintPath>
     </Reference>
     <Reference Include="YWB.AntidetectAccountParser">
-      <HintPath>..\..\YWB.AntidetectAccountParser-master\bin\Release\net6.0\YWB.AntidetectAccountParser.dll</HintPath>
+      <HintPath>libs\YWB.AntidetectAccountParser.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -241,5 +241,10 @@
     <Compile Update="Views\ProcessProxyWnd.axaml.cs">
       <DependentUpon>ProcessProxyWnd.axaml</DependentUpon>
     </Compile>	  
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="libs\YWB.AntidetectAccountParser.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

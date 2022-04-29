@@ -10,7 +10,7 @@
 		xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
 		xmlns:cust="using:AntidetectAccParcer.Views.custom"
         x:Class="AntidetectAccParcer.Views.importWnd"		
-        Title="XTime Parser v1.0" 
+        Title="XTime Parser v1.1" 
 		Width="1280" Height="720"
 		WindowStartupLocation="CenterScreen">
 

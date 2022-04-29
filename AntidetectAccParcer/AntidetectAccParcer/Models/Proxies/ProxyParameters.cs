@@ -108,6 +108,8 @@ namespace AntidetectAccParcer.Models.Proxies
             var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
             Flag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/{Country}.png")));
 #else
+
+
             p = await proxyChecker.Check(Proxy.Address);
             res = p.success;
 
@@ -118,9 +120,9 @@ namespace AntidetectAccParcer.Models.Proxies
                     Country = proxyGeoExceptions[Proxy.Address];
                 var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
                 Flag = new Bitmap(assets.Open(new Uri($"avares://AntidetectAccParcer/Assets/{Country}.png")));
-            }
-            else
-                throw new Exception("Превышен лимит на проверку прокси");
+            } else
+                throw new Exception("Не удалось проверить прокси");
+
 #endif
 
             return res;
