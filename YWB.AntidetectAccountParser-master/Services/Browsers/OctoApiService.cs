@@ -194,7 +194,7 @@ namespace YWB.AntidetectAccountParser.Services.Browsers
             //    var token = Console.ReadLine();
             //    return token;
             //}
-            return $"89634683683047aea2a242eaf2b852b4";
+            return $"2c8f14aa088843e68f2d298f054aaed8";
         }
     }
 }
